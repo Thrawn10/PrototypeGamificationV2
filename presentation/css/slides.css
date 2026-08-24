@@ -1,0 +1,834 @@
+/* ============================================================
+   Shared design system for the Gamification Pitch slides.
+   Each slide is a standalone HTML fragment in /Slides/ that is
+   loaded into reveal.js. This file holds the common styles so
+   every slide looks consistent.
+   ============================================================ */
+
+:root {
+  --bit-blue: #2f3e46;
+  --bit-accent: #f59e0b;
+  --bit-light: #faf7f2;
+  --bit-text: #222;
+  --bit-muted: #6b7280;
+  --pos: #4a7c59;
+  --warn: #c62828;
+}
+
+/* reveal.js renders each slide inside a <section>. We style the
+   inner .slide card so it fills the section and looks like a
+   standalone slide. */
+.reveal section {
+  text-align: left;
+  background: transparent;
+}
+
+.reveal .slide {
+  width: 100%;
+  height: 100%;
+  min-height: 620px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  padding: 3rem 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.reveal .slide::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--bit-blue), var(--bit-accent));
+}
+
+/* Typography */
+.reveal .slide h1,
+.reveal .slide h2,
+.reveal .slide h3 {
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: var(--bit-blue);
+  text-align: center;
+  text-transform: none;
+  letter-spacing: normal;
+  text-shadow: none;
+}
+
+.reveal .slide h1 {
+  font-size: 3rem;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.reveal .slide h2 {
+  font-size: 2.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.reveal .slide h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.6rem;
+}
+
+.reveal .slide p,
+.reveal .slide li {
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: var(--bit-text);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.reveal .slide ul {
+  list-style: none;
+  margin: 0;
+}
+
+/* Kicker (small uppercase label above the title) */
+.reveal .kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.85rem;
+  color: var(--bit-accent);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Subtitle under the h2 */
+.reveal .subtitle {
+  text-align: center;
+  color: var(--bit-muted);
+  font-size: 1.05rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Meta block (title slide) */
+.reveal .meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--bit-muted);
+  font-size: 1rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1.5rem;
+}
+
+/* Slide number badge (bottom-right) */
+.reveal .slide-number {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 2rem;
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Optional / Backup badges */
+.reveal .badge-optional,
+.reveal .badge-backup {
+  display: inline-block;
+  border-radius: 20px;
+  padding: 0.25rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  align-self: center;
+}
+
+.reveal .badge-optional {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.reveal .badge-backup {
+  background: #e2e8f0;
+  color: var(--bit-blue);
+}
+
+/* ============================================================
+   Layouts
+   ============================================================ */
+
+/* --- Three columns (S02) --- */
+.reveal .columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  flex: 1;
+}
+
+.reveal .col {
+  background: var(--bit-light);
+  border-radius: 10px;
+  padding: 1.5rem;
+  border-top: 4px solid var(--bit-accent);
+}
+
+.reveal .col h3 {
+  font-size: 1.15rem;
+  color: var(--bit-blue);
+  margin-bottom: 0.75rem;
+}
+
+.reveal .col p {
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.reveal .abschluss {
+  margin-top: 2rem;
+  padding: 1.2rem 1.5rem;
+  background: #fdf4e3;
+  border-left: 5px solid var(--bit-accent);
+  border-radius: 6px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--bit-blue);
+}
+
+/* --- KPI cards (S03, S04, S09) --- */
+.reveal .kennzahlen {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.reveal .kpi {
+  flex: 1;
+  background: var(--bit-blue);
+  color: #fff;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+
+.reveal .kpi .wert {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--bit-accent);
+}
+
+.reveal .kpi .label {
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+  opacity: 0.9;
+}
+
+.reveal .kpi .quelle {
+  font-size: 0.7rem;
+  margin-top: 0.3rem;
+  opacity: 0.6;
+}
+
+/* Compact KPI (used in footers) */
+.reveal .kpi-compact {
+  background: var(--bit-blue);
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  text-align: center;
+}
+
+.reveal .kpi-compact .wert {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--bit-accent);
+}
+
+.reveal .kpi-compact .label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+/* --- Two-column comparison (S03, S06) --- */
+.reveal .gegenueberstellung,
+.reveal .spalten {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+/* Default .box (used in B05 links & sources) */
+.reveal .box {
+  background: var(--bit-light);
+  border-radius: 10px;
+  padding: 1.4rem;
+  border-top: 4px solid var(--bit-accent);
+}
+
+.reveal .box h3 {
+  font-size: 1.1rem;
+  color: var(--bit-blue);
+  margin-bottom: 0.8rem;
+}
+
+.reveal .box ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.reveal .box li {
+  font-size: 0.92rem;
+  line-height: 1.45;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.reveal .box li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--bit-accent);
+  font-weight: 700;
+}
+
+/* Comparison boxes (S03, S06) override the default */
+.reveal .box.positiv {
+  background: #eef5ec;
+  border-top: 4px solid var(--pos);
+}
+
+.reveal .box.warnung {
+  background: #fdecea;
+  border-top: 4px solid var(--warn);
+}
+
+.reveal .box.positiv h3 { color: var(--pos); }
+.reveal .box.warnung h3 { color: var(--warn); }
+
+.reveal .box.positiv li::before {
+  content: "✓";
+  color: var(--pos);
+}
+
+.reveal .box.warnung li::before {
+  content: "✕";
+  color: var(--warn);
+}
+
+/* --- Quote cards (S04) --- */
+.reveal .karten {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+.reveal .karte {
+  background: var(--bit-light);
+  border-radius: 10px;
+  padding: 1.4rem;
+  border-left: 5px solid var(--bit-accent);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.reveal .karte .aussage {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--bit-text);
+  margin-bottom: 1rem;
+}
+
+.reveal .karte .rolle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--bit-blue);
+}
+
+.reveal .fusszeile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.reveal .hinweis {
+  font-size: 0.85rem;
+  color: var(--bit-muted);
+}
+
+/* --- Three columns compact (S05) --- */
+.reveal .saeulen {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  flex: 1;
+}
+
+.reveal .saeule {
+  background: var(--bit-light);
+  border-radius: 10px;
+  padding: 1.5rem;
+  border-top: 4px solid var(--bit-accent);
+}
+
+.reveal .saeule h3 {
+  font-size: 1.1rem;
+  color: var(--bit-blue);
+  margin-bottom: 0.3rem;
+}
+
+.reveal .saeule .quelle {
+  font-size: 0.8rem;
+  color: var(--bit-muted);
+  font-style: italic;
+  margin-bottom: 0.8rem;
+}
+
+.reveal .saeule p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.reveal .merksatz {
+  margin-top: 1.5rem;
+  padding: 1.2rem 1.5rem;
+  background: #fdf4e3;
+  border-left: 5px solid var(--bit-accent);
+  border-radius: 6px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--bit-blue);
+}
+
+.reveal .fussnote {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--bit-muted);
+  text-align: center;
+}
+
+/* --- Fazit bar (S06) --- */
+.reveal .fazit {
+  margin-top: 1.5rem;
+  padding: 1.2rem 1.5rem;
+  background: var(--bit-blue);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* --- Hero + bullets (S07) --- */
+.reveal .hero {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--bit-blue);
+  background: var(--bit-light);
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 5px solid var(--bit-accent);
+}
+
+.reveal .bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.reveal .bullets li {
+  font-size: 1rem;
+  line-height: 1.5;
+  padding-left: 1.6rem;
+  position: relative;
+}
+
+.reveal .bullets li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--bit-accent);
+  font-weight: 700;
+}
+
+.reveal .demo-hinweis {
+  margin-top: 1.5rem;
+  padding: 0.9rem 1.2rem;
+  background: #fdf4e3;
+  border: 2px dashed var(--bit-accent);
+  border-radius: 8px;
+  color: var(--bit-blue);
+  font-weight: 600;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
+/* --- Verankerung / warning blocks (S08) --- */
+.reveal .verankerung {
+  margin-top: 1.2rem;
+  padding: 1rem 1.4rem;
+  background: #fdf4e3;
+  border-left: 5px solid var(--bit-accent);
+  border-radius: 6px;
+  font-size: 1rem;
+  color: var(--bit-blue);
+}
+
+.reveal .warnung {
+  margin-top: 1rem;
+  padding: 1rem 1.4rem;
+  background: #fdecea;
+  border-left: 5px solid var(--warn);
+  border-radius: 6px;
+}
+
+.reveal .warnung .titel {
+  font-weight: 700;
+  color: var(--warn);
+  margin-bottom: 0.3rem;
+}
+
+.reveal .warnung .text {
+  font-size: 0.95rem;
+  color: var(--bit-text);
+}
+
+/* --- Idea list (S11) --- */
+.reveal .idee {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.reveal .idee li {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  padding-left: 1.8rem;
+  position: relative;
+}
+
+.reveal .idee li::before {
+  content: "🃏";
+  position: absolute;
+  left: 0;
+  font-size: 1.1rem;
+}
+
+.reveal .einordnung {
+  margin-top: 1.5rem;
+  padding: 1.2rem 1.5rem;
+  background: var(--bit-light);
+  border-left: 5px solid var(--bit-accent);
+  border-radius: 6px;
+  font-size: 1rem;
+  color: var(--bit-text);
+}
+
+/* --- Nutzen raster (S09) --- */
+.reveal .raster {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  flex: 1;
+}
+
+.reveal .raster .karte {
+  background: var(--bit-light);
+  border-radius: 10px;
+  padding: 1.4rem;
+  border-top: 4px solid var(--bit-accent);
+}
+
+.reveal .raster .karte h3 {
+  font-size: 1.1rem;
+  color: var(--bit-blue);
+  margin-bottom: 0.6rem;
+}
+
+.reveal .raster .karte p {
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+/* --- Hervorhebung (S10, S11) --- */
+.reveal .hervorhebung {
+  margin-top: 1.5rem;
+  padding: 1.3rem 1.5rem;
+  background: var(--bit-blue);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.reveal .technik,
+.reveal .methoden {
+  margin-top: 1.5rem;
+  padding: 1.2rem 1.5rem;
+  background: var(--bit-light);
+  border-left: 5px solid var(--bit-accent);
+  border-radius: 6px;
+}
+
+.reveal .technik h3,
+.reveal .methoden h3 {
+  font-size: 1rem;
+  color: var(--bit-blue);
+  margin-bottom: 0.6rem;
+}
+
+.reveal .technik ul,
+.reveal .methoden ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.reveal .technik li,
+.reveal .methoden li {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  padding-left: 1.3rem;
+  position: relative;
+}
+
+.reveal .technik li::before,
+.reveal .methoden li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--bit-accent);
+  font-weight: 700;
+}
+
+/* --- Roadmap stufen (S15) --- */
+.reveal .stufen {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.reveal .stufe {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+  background: var(--bit-light);
+  border-radius: 10px;
+  padding: 1.2rem 1.4rem;
+}
+
+.reveal .stufe .nummer {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--bit-blue);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.reveal .stufe .inhalt h3 {
+  font-size: 1.15rem;
+  color: var(--bit-blue);
+  margin-bottom: 0.3rem;
+}
+
+.reveal .stufe .inhalt p {
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.reveal .stufe .zeitraum {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--bit-accent);
+}
+
+/* --- Ask (removed) --- */
+.reveal .zusammenfassung {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
+}
+
+.reveal .zusammenfassung li {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  padding-left: 1.6rem;
+  position: relative;
+}
+
+.reveal .zusammenfassung li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--bit-accent);
+  font-weight: 700;
+}
+
+.reveal .ask-haupt {
+  padding: 1.3rem 1.5rem;
+  background: var(--bit-blue);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.reveal .optionen {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.reveal .optionen li {
+  font-size: 1rem;
+  line-height: 1.45;
+  padding: 0.8rem 1.2rem;
+  background: var(--bit-light);
+  border-left: 4px solid var(--bit-accent);
+  border-radius: 6px;
+}
+
+.reveal .abschluss-satz {
+  margin-top: 1.5rem;
+  padding: 1.2rem 1.5rem;
+  background: #fdf4e3;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--bit-blue);
+  text-align: center;
+}
+
+/* --- Tables (B01, B02, B03) --- */
+.reveal table {
+  width: 100%;
+  border-collapse: collapse;
+  flex: 1;
+  margin: 0;
+}
+
+.reveal table th {
+  background: var(--bit-blue);
+  color: #fff;
+  text-align: left;
+  padding: 0.9rem 1.2rem;
+  font-size: 0.95rem;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.reveal table th:first-child { border-radius: 8px 0 0 0; }
+.reveal table th:last-child { border-radius: 0 8px 0 0; }
+
+.reveal table td {
+  padding: 0.9rem 1.2rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: var(--bit-text);
+}
+
+.reveal table tr:nth-child(even) td { background: var(--bit-light); }
+
+/* --- Prinzipien raster (B04) --- */
+.reveal .prinzipien {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  flex: 1;
+}
+
+.reveal .prinzip {
+  background: var(--bit-light);
+  border-radius: 10px;
+  padding: 1.1rem 1.2rem;
+  border-top: 4px solid var(--bit-accent);
+}
+
+.reveal .prinzip h3 {
+  font-size: 1rem;
+  color: var(--bit-blue);
+  margin-bottom: 0.4rem;
+}
+
+.reveal .prinzip p {
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+/* --- Links & sources (B05) --- */
+.reveal .links {
+  margin-bottom: 1.5rem;
+}
+
+.reveal .links a {
+  display: inline-block;
+  background: var(--bit-blue);
+  color: #fff;
+  text-decoration: none;
+  padding: 0.8rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.reveal .links a:hover { background: #2a4a6c; }
+
+.reveal .disclaimer {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.4rem;
+  background: #fff3cd;
+  border-left: 5px solid #ffc107;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #856404;
+}
+
+/* ============================================================
+   reveal.js overrides
+   ============================================================ */
+
+/* Make the reveal background light so the white cards stand out */
+.reveal-viewport {
+  background: var(--bit-light);
+}
+
+/* Ensure the slide card fills the reveal section */
+.reveal .slides section {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* PDF export: ensure each slide fills a page */
+.reveal .slides section .slide {
+  min-height: 100%;
+}

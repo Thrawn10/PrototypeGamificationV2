@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamification der Ausbildung im BIT — Präsentation</title>
+
+  <!-- reveal.js via CDN (no build step) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css">
+
+  <!-- Local styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/slides.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <!-- ============================================================
+           All slides are inlined below so the deck works from file://
+           (double-click start.html) without a server or an IDE.
+           To reorder or hide a slide, move or delete its <section>.
+           ============================================================ -->
+
+      <section>
+        <div class="slide">
+          <div class="kicker">Projektvorschlag für die Nachwuchsförderung</div>
+          <h1>Gamification der Ausbildung im BIT</h1>
+          <div class="meta">
+            <span>Tim Ambühl</span>
+            <span>Zollikofen, 25.08.2026</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="slide">
+          <h2>Worum es heute geht</h2>
+          <div class="columns">
+            <div class="col">
+              <h3>Das Problem</h3>
+              <p>Der Ausbildungsstand wird in Excel gepflegt. Es fehlt eine digitale, motivierende Rückmeldung.</p>
+            </div>
+            <div class="col">
+              <h3>Der Vorschlag</h3>
+              <p>Eine eigene Webapplikation: Skilltree, gekoppeltes Feedback, Badges</p>
+            </div>
+            <div class="col">
+              <h3>Die Umsetzung</h3>
+              <p>Gebaut von Nachwuchskräften, begleitet von Praxisbildenden, evaluiert von PiBS-Studierenden.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="slide">
+          <h2>Die Ausbildung läuft – die Werkzeuge sind analog</h2>
+          <div class="subtitle">Gemeinsame Ausgangslage, kurz gespiegelt</div>
+          <div class="kennzahlen">
+            <div class="kpi">
+              <div class="wert">99 %</div>
+              <div class="label">Abschlussquote im BIT</div>
+            </div>
+            <div class="kpi">
+              <div class="wert">~400 CHF</div>
+              <div class="label">Jahreskosten pro Nachwuchskraft für die kommerzielle Marktlösung</div>
+            </div>
+          </div>
+          <div class="gegenueberstellung">
+            <div class="box positiv">
+              <h3>Das funktioniert</h3>
+              <ul>
+                <li>Rund 99 Prozent Abschlussquote, bisher keine nicht bestandene Lehrabschlussprüfung.</li>
+                <li>Klar geregelter Rahmen: Bildungsplan mit definierten Handlungskompetenzen an drei Lernorten.</li>
+                <li>Engmaschige Begleitung, besonders im ersten Lehrjahr über das BBC.</li>
+              </ul>
+            </div>
+            <div class="box warnung">
+              <h3>Probleme</h3>
+              <ul>
+                <li>Dokumentation über monatliche Lernberichte, Bildungsberichte 1–4 und gemeinsame Excel-Tabellen – gesetzlich genügend, aber ohne digitales, motivierendes Rückmeldesystem.</li>
+                <li>Die Qualität der Begleitung variiert merklich zwischen den Praxisbildenden.</li>
+                <li>Die kommerzielle Marktlösung kostet rund 400 CHF pro Nachwuchskraft und Jahr – bei TODO Nachwuchskräften jährlich wiederkehrend.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="slide">
+          <h2>Warum Gamification</h2>
+          <div class="subtitle">Die Kurzfassung aus der Literaturanalyse</div>
+          <div class="saeulen">
+            <div class="saeule">
+              <h3>Selbstbestimmungstheorie</h3>
+              <div class="quelle">Ryan &amp; Deci, 2000</div>
+              <p>Kompetenz, Autonomie, soziale Eingebundenheit – Spielelemente können diese drei Grundbedürfnisse gezielt ansprechen.</p>
+            </div>
+            <div class="saeule">
+              <h3>Erwartungstheorie</h3>
+              <div class="quelle">Vroom, 1965</div>
+              <p>Transparente Regeln, sofortiges Feedback und sinnstiftende Abzeichen erhöhen die Motivationskraft.</p>
+            </div>
+            <div class="saeule">
+              <h3>IS-Erfolgsmodell</h3>
+              <div class="quelle">DeLone &amp; McLean, 1992</div>
+              <p>Spielelemente verbessern Informations- und Systemqualität und steigern darüber Nützlichkeit und Selbstwirksamkeit.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="slide">
+          <h2>Der Ausbildungsverlauf als Skilltree</h2>
+          <div class="hero">Der gesamte Ausbildungsverlauf – vom BBC bis zur IPA – als verzweigter Baum.</div>
+          <ul class="bullets">
+            <li>Abgeschlossene Kompetenzen werden freigeschaltet und öffnen den Weg zu weiterführenden Lernzielen.</li>
+            <li>Keine erzwungene Reihenfolge: Kompetenzen lassen sich in beliebiger Reihenfolge als erworben markieren – die Ausbildung muss flexibel auf individuelle Interessen und betriebliche Realität reagieren können.</li>
+            <li>Ein Fortschrittsbalken kann den Baum für die schnelle Gesamtübersicht ergänzen.</li>
+            <li>Ergebnis: bessere Übersicht über die Ausbildung und eine strukturierte Datenlage statt verteilter Excel-Tabellen.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <div class="slide">
+          <h2>Feedback wird verbindlich</h2>
+          <ul class="bullets">
+            <li>Für jeden Abschluss einer Kompetenz muss Feedback vom Praxisbildner kommen – Feedback wird strukturell erzwungen, nicht dem Zufall überlassen.</li>
+            <li>Es hängt direkt an der Kompetenz im Baum, nicht an einem losen Formular. Eine chronologische Historie macht die Entwicklung nachvollziehbar.</li>
+            <li>Verpflichtende Einträge ergänzen mündliches Feedback – oder stellen sicher, dass überhaupt Feedback ankommt.</li>
+            <li>Der bestehende Lernjournal-Prozess kann integriert werden.</li>
+          </ul>
+          <div class="verankerung">Damit adressiert die Applikation die Varianz in der Begleitqualität – einen der meistgenannten Punkte aus den Interviews.</div>
+        </div>
+      </section>
+
+      <section>
+        <div class="slide">
+          <h2>Anerkennung wird sichtbar</h2>
+          <ul class="bullets">
+            <li>Erreichte Meilensteine lösen automatisch Badges aus – unterschieden nach kleinen (erste Kompetenz) und grossen Meilensteinen (Lehrjahr abgeschlossen).</li>
+            <li>Digitale Badges können mit physischen Stickern ergänzt oder ausgetauscht werden.</li>
+            <li>Nachwuchskräfte entwerfen eigene Badges für ihren Jahrgang – zum Beispiel ein Abschluss-Badge 2026.</li>
+          </ul>
+          <div class="verankerung">Damit adressiert die Applikation die Wertschätzung – einen der meistgenannten Punkte aus den Interviews.</div>
+          <div class="fusszeile">
+            <div class="kpi-compact">
+              <div class="wert">~90 %</div>
+              <div class="label">Anteil der Ausbildungszufriedenheit, der auf Wertschätzung und Kommunikation zurückgeführt wird</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="slide">
+          <h2>Individualisierbar – und mit Cockpit</h2>
+          <div class="subtitle">Der administrative Nutzen für die Nachwuchsförderung</div>
+          <div class="spalten">
+            <div class="box">
+              <h3>Individualisierung</h3>
+              <ul>
+                <li>Praxisbildende und Ausbildungsverantwortliche passen Meilensteine beliebig an und erweitern sie.</li>
+                <li>Neue oder spezielle Meilensteine sind jederzeit ergänzbar – zum Beispiel ein KI-Workshop oder die Mitarbeit in einem Projekt.</li>
+                <li>Kompetenzkataloge sind ohne Programmieraufwand pflegbar.</li>
+                <li>Damit lässt sich das System auf Berufsfeld, Jahrgang und einzelne Person zuschneiden.</li>
+              </ul>
+            </div>
+            <div class="box">
+              <h3>Cockpit und Datenlage</h3>
+              <ul>
+                <li>Live-Abruf des Fortschritts jeder Nachwuchskraft.</li>
+                <li>Regeln, um frühzeitig auf Probleme aufmerksam zu werden.</li>
+                <li>Der administrative Aufwand kann massiv verringert werden.</li>
+                <li>Belastbare Datengrundlage über Jahrgänge und Berufsfelder hinweg.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+            <!-- Live demo: the prototype embedded as an iframe -->
+      <section>
+        <div class="slide demo-slide">
+          <h2>Live-Demo des Prototyps</h2>
+          <div class="demo-frame" id="demo-frame">
+            <iframe
+              src="../prototype/index.html"
+              title="Prototyp – Gamification der Ausbildung im BIT"
+              loading="lazy"
+              allowfullscreen></iframe>
+            <button class="fullscreen-btn" id="fullscreen-btn" type="button">⛶ Fullscreen</button>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="slide">
+          <h2>Was das BIT davon hat</h2>
+          <div class="raster">
+            <div class="karte">
+              <h3>Motivation</h3>
+              <p>Mögliche Motivationssteigerung von Lernenden und Studierenden – besonders bei wenig intrinsisch motivierenden Tätigkeiten wie Dokumentation oder Unit-Tests.</p>
+            </div>
+            <div class="karte">
+              <h3>Lesbarkeit des Bildungsplans</h3>
+              <p>Bessere Darstellung und Readability des Bildungsplans. Der Ausbildungsstand ist jederzeit für alle Beteiligten transparent.</p>
+            </div>
+            <div class="karte">
+              <h3>Verpflichtendes Feedback</h3>
+              <p>Feedback ist strukturell verankert statt von der Person abhängig – das gleicht Unterschiede in der Begleitqualität aus.</p>
+            </div>
+            <div class="karte">
+              <h3>Verbesserte Datenlage</h3>
+              <p>Strukturierte, auswertbare Daten statt verteilter Excel-Tabellen – Grundlage für Frühwarnung und Steuerung.</p>
+            </div>
+            <div class="karte">
+              <h3>Eigenentwicklung</h3>
+              <p>Kann durch Nachwuchskräfte entwickelt werden – kein Lizenzabo, volle Kontrolle über die Weiterentwicklung.</p>
+            </div>
+            <div class="karte">
+              <h3>Inklusion</h3>
+              <p>Klare Aufgabenstellungen, explizite Fortschrittsanzeigen und strukturierte Rückmeldungen wirken besonders bei neurodivergenten Auszubildenden.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="slide">
+          <h2>Wissenschaftlich begleitet</h2>
+          <div class="subtitle">PiBS-Studierende messen, ob es wirkt</div>
+          <ul class="bullets">
+            <li>Begleitung durch PiBS-Studierende im Rahmen einer Transferarbeit, Seminararbeit oder Bachelorarbeit.</li>
+            <li>Dadurch wird die Effektivität gemessen und es können gezielte Änderungen vorgenommen werden.</li>
+            <li>Zusätzlich fundiert und rechtfertigt es das Projekt wissenschaftlich.</li>
+          </ul>
+          <div class="methoden">
+            <h3>Mögliche Validierungsmethoden</h3>
+            <ul>
+              <li>Usability-Tests nach System Usability Scale mit Auszubildenden und Praxisbildenden</li>
+              <li>Qualitative Interviews zu wahrgenommener Motivation und Akzeptanz</li>
+              <li>Vergleich des Dokumentationsaufwands vor und nach Einführung von M1 und M2</li>
+              <li>Nachholen der bisher fehlenden Anforderungserhebung bei den Auszubildenden selbst</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- reveal.js scripts via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+  <script src="js/slides.js"></script>
+</body>
+</html>

@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad — Ausbildungsbegleitung BIT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf7f2; --bg-2:#F1EADA; --panel:#FFFFFF; --panel-2:#F5EFE1;
+  --line:#E9E1CE; --line-2:#DBCDAC; --txt:#2f3e46; --txt-2:#57666E;
+  --muted:#8B98A0; --dim:#C9BFA6; --ipa:#f59e0b; --alert:#D9534F;
+  --violet:#f59e0b; --gold:#E8A33D; --cyan:#37BDD8; --green:#31C489; --orange:#F0703C;
+  --done-plain:#57666E; --open-plain:#C7CFD3;
+  --ease:cubic-bezier(.22,.7,.3,1);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0; background:var(--bg); color:var(--txt);
+  font-family:'Inter',sans-serif; font-size:14px; line-height:1.5;
+  overflow:hidden; -webkit-font-smoothing:antialiased;
+}
+#app{
+  position:relative; width:100%; height:100vh; min-height:600px;
+  display:flex; flex-direction:column;
+  background-color:var(--bg);
+  background-image:
+    radial-gradient(circle at 22% 42%, rgba(245,158,11,.07) 0%, transparent 60%),
+    radial-gradient(circle at 88% 78%, rgba(47,62,70,.05) 0%, transparent 60%),
+    radial-gradient(circle, rgba(47,62,70,.07) 1px, transparent 1.4px);
+  background-size: auto, auto, 34px 34px;
+}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--muted); font-weight:500;
+}
+.mono{font-family:'JetBrains Mono',monospace;}
+.display{font-family:'Chakra Petch',sans-serif;}
+
+/* ---------- Header ---------- */
+header{
+  display:flex; align-items:center; gap:18px; padding:12px 20px;
+  border-bottom:1px solid var(--line); background:rgba(8,11,22,.6);
+  backdrop-filter:blur(6px); flex-shrink:0; position:relative; z-index:30;
+}
+.wordmark{display:flex; align-items:center; gap:10px;}
+.wordmark-badge{
+  width:34px; height:34px; position:relative; display:flex; align-items:center; justify-content:center;
+  filter:drop-shadow(0 0 8px rgba(245,158,11,.45));
+}
+.wordmark-badge svg{width:100%; height:100%;}
+.wordmark-text{display:flex; flex-direction:column; line-height:1.1;}
+.wordmark-text .name{
+  font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:16.5px;
+  letter-spacing:.05em; color:#fff;
+}
+.wordmark-text .sub{font-size:10.5px; color:#fff; opacity:.75;}
+.chip-prototyp{
+  font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:#8A5A0C; background:#FDECC8;
+  border:1px solid #F3D28C; padding:4px 9px; border-radius:20px; font-weight:600;
+  flex-shrink:0;
+}
+.spacer{flex:1;}
+.xp-block{display:flex; align-items:center; gap:10px; flex-shrink:0;}
+.xp-text{display:flex; flex-direction:column; align-items:flex-end; line-height:1.15;}
+.xp-level{font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:12.5px; color:#fff;}
+.xp-num{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#fff; opacity:.75;}
+.xp-bar-track{width:190px; height:7px; border-radius:20px; background:var(--line); overflow:hidden; border:1px solid var(--line-2);}
+.xp-bar-fill{height:100%; border-radius:20px; background:linear-gradient(90deg,#FBBF54,var(--violet)); transition:width .65s var(--ease);}
+
+.toggle-block{display:flex; align-items:center; gap:8px; flex-shrink:0;}
+.toggle-label{font-size:11.5px; color:#fff; font-weight:500; white-space:nowrap;}
+.switch{
+  position:relative; width:38px; height:21px; border-radius:20px; background:var(--line-2);
+  border:none; cursor:pointer; padding:0; transition:background .18s var(--ease); flex-shrink:0;
+}
+.switch::after{
+  content:''; position:absolute; top:2px; left:2px; width:17px; height:17px; border-radius:50%;
+  background:var(--txt-2); transition:transform .18s var(--ease), background .18s var(--ease);
+}
+.switch.on{background:var(--violet);}
+.switch.on::after{transform:translateX(17px); background:#fff;}
+.switch:focus-visible{outline:2px solid var(--violet); outline-offset:2px;}
+
+.role-switch{display:flex; background:var(--panel-2); border:1px solid var(--line-2); border-radius:8px; padding:2px; flex-shrink:0;}
+.role-btn{
+  font-family:'Inter',sans-serif; font-weight:600; font-size:11.5px; color:#000;
+  background:none; border:none; padding:6px 11px; border-radius:6px; cursor:pointer;
+  transition:background .16s var(--ease), color .16s var(--ease); white-space:nowrap;
+}
+.role-btn.active{background:var(--violet); color:#2f3e46;}
+.role-btn:focus-visible{outline:2px solid var(--violet); outline-offset:1px;}
+.role-btn:not(.active):hover{color:#000; opacity:.7;}
+
+/* ---------- Tabs ---------- */
+nav.tabs{
+  display:flex; gap:2px; padding:0 20px; border-bottom:1px solid var(--line);
+  background:rgba(8,11,22,.4); flex-shrink:0; position:relative; z-index:20;
+}
+.tab-btn{
+  font-family:'Inter',sans-serif; font-weight:600; font-size:13px; color:#fff;
+  background:none; border:none; border-bottom:2px solid transparent; padding:12px 16px;
+  cursor:pointer; display:flex; align-items:center; gap:7px; transition:color .16s var(--ease), border-color .16s var(--ease);
+}
+.tab-btn:hover{color:#fff; opacity:.85;}
+.tab-btn.active{color:#fff; border-bottom-color:var(--violet);}
+.tab-btn:focus-visible{outline:2px solid var(--violet); outline-offset:-2px;}
+.tab-count{
+  font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700;
+  background:var(--line-2); color:var(--txt-2); padding:1px 6px; border-radius:20px; min-width:16px; text-align:center;
+}
+.tab-count.hot{background:var(--alert); color:#fff;}
+
+/* ---------- Main area ---------- */
+main{flex:1; position:relative; overflow:hidden;}
+.view{position:absolute; inset:0; display:none; overflow:auto;}
+.view.active{display:block;}
+
+/* ---------- Tree view ---------- */
+#view-tree.active{display:flex;}
+#view-tree{overflow:hidden;}
+.tree-canvas{flex:1; position:relative; overflow:hidden; cursor:grab;}
+.tree-canvas.dragging{cursor:grabbing;}
+#tree-svg{width:100%; height:100%; display:block; touch-action:none;}
+.tree-canvas:focus-visible{outline:none;}
+
+.overlay-stack{position:absolute; top:16px; left:16px; display:flex; flex-direction:column; gap:10px; z-index:5; pointer-events:none;}
+.overlay-card{
+  pointer-events:auto; background:rgba(17,24,48,.82); backdrop-filter:blur(8px);
+  border:1px solid var(--line-2); border-radius:10px; padding:12px 15px; width:206px;
+}
+.progress-card .eyebrow{margin-bottom:6px; color:#fff; opacity:.75;}
+.progress-num-row{display:flex; align-items:baseline; gap:4px; margin-bottom:8px;}
+.progress-num{font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:26px; color:#fff;}
+.progress-den{font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:14px; color:#fff; opacity:.75;}
+.progress-track{height:6px; border-radius:20px; background:var(--line); overflow:hidden;}
+.progress-fill{height:100%; background:linear-gradient(90deg,#FBBF54,var(--violet)); border-radius:20px; transition:width .65s var(--ease);}
+
+.legend-card{display:flex; flex-direction:column; gap:7px;}
+.legend-row{display:flex; align-items:center; gap:8px; font-size:11.5px; color:var(--txt-2); font-weight:500;}
+.legend-hex{width:13px; height:13px; flex-shrink:0;}
+
+.zoom-controls{position:absolute; bottom:16px; right:16px; display:flex; flex-direction:column; gap:6px; z-index:5;}
+.zoom-btn{
+  width:34px; height:34px; border-radius:8px; background:var(--panel); border:1px solid var(--line-2);
+  color:var(--txt-2); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:background .16s var(--ease), color .16s var(--ease);
+}
+.zoom-btn:hover{background:var(--panel-2); color:var(--txt);}
+.zoom-btn:focus-visible{outline:2px solid var(--violet); outline-offset:2px;}
+
+.locked-toast{
+  position:absolute; left:50%; top:20px; transform:translateX(-50%);
+  background:var(--panel); border:1px solid var(--line-2); border-left:3px solid var(--alert);
+  border-radius:8px; padding:10px 16px; z-index:15; max-width:340px;
+  animation:lockedIn .22s var(--ease);
+}
+@keyframes lockedIn{from{opacity:0; transform:translate(-50%,-6px);} to{opacity:1; transform:translate(-50%,0);}}
+.locked-toast .title{font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12.5px; color:var(--alert); margin-bottom:2px;}
+.locked-toast .text{font-size:12px; color:var(--txt-2);}
+
+/* SVG node styling */
+.node{cursor:pointer;}
+.node:focus-visible .hex-main{stroke:var(--violet); stroke-width:3;}
+.node.locked{cursor:not-allowed;}
+.node .hex-main{transition:stroke .18s var(--ease), stroke-width .18s var(--ease), fill-opacity .18s var(--ease);}
+.node .glow{transition:opacity .25s var(--ease);}
+.node .ring-fill{transition:stroke-dashoffset .5s var(--ease);}
+.node .code-text{font-family:'JetBrains Mono',monospace; font-weight:700; fill:var(--txt); pointer-events:none;}
+.node .lock-icon{font-size:15px; pointer-events:none;}
+.node .label-text{font-family:'Inter',sans-serif; font-weight:500; fill:var(--txt-2); pointer-events:none;}
+.node.hover .hex-main{stroke:var(--txt); stroke-opacity:.55;}
+
+.edge-case{fill:none; stroke:var(--txt); stroke-opacity:.5;}
+.edge-line{fill:none; transition:stroke .25s var(--ease);}
+
+@keyframes unlockPulse{
+  0%,100%{stroke-width:2;} 50%{stroke-width:5;}
+}
+.node.just-unlocked .hex-main{animation:unlockPulse 1.6s var(--ease) 2;}
+@keyframes breathe{
+  0%,100%{stroke-opacity:.6;} 50%{stroke-opacity:1;}
+}
+.node.active .hex-main{animation:breathe 2.8s ease-in-out infinite;}
+
+/* plain mode: strip color */
+.plain .node .glow{opacity:0 !important;}
+.plain .node.done .hex-main{fill:var(--panel-2) !important; stroke:var(--done-plain) !important;}
+.plain .node.done .ring-fill{stroke:var(--done-plain) !important;}
+.plain .node.active .hex-main, .plain .node.pending .hex-main{stroke:var(--done-plain) !important;}
+.plain .node.active .ring-fill, .plain .node.pending .ring-fill{stroke:var(--done-plain) !important;}
+.plain .node.open .hex-main{stroke:var(--open-plain) !important;}
+.plain .edge-line{stroke:var(--open-plain) !important;}
+.plain .edge-line.live{stroke:var(--done-plain) !important;}
+.plain .node.sel .hex-main{stroke:var(--txt) !important;}
+
+/* ---------- Detail panel ---------- */
+.detail-panel{
+  position:absolute; top:0; right:0; bottom:0; width:372px; max-width:92vw;
+  background:var(--panel); border-left:1px solid var(--line);
+  transform:translateX(100%); transition:transform .34s var(--ease);
+  display:flex; flex-direction:column; z-index:10; overflow:hidden;
+}
+.detail-panel.open{transform:translateX(0);}
+.detail-empty{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:30px; text-align:center;}
+.detail-empty .empty-hex{width:52px; height:52px; opacity:.35;}
+.detail-empty p{color:var(--muted); font-size:13px; max-width:220px; margin:0;}
+
+.panel-scroll{flex:1; overflow-y:auto;}
+.panel-head{padding:20px 20px 16px; border-bottom:1px solid var(--line); position:relative;}
+.panel-close{
+  position:absolute; top:16px; right:16px; width:26px; height:26px; border-radius:6px;
+  background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; line-height:1;
+}
+.panel-close:hover{background:var(--line); color:var(--txt);}
+.panel-close:focus-visible{outline:2px solid var(--violet);}
+.panel-area-row{display:flex; align-items:center; gap:7px; margin-bottom:10px;}
+.panel-area-hex{width:11px; height:11px;}
+.panel-area-name{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; font-weight:600;}
+.panel-title{font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:17px; line-height:1.35; margin:0 0 12px; padding-right:26px;}
+.panel-title .code{font-family:'JetBrains Mono',monospace;}
+.panel-chips{display:flex; gap:7px; flex-wrap:wrap;}
+.chip{
+  font-size:11px; font-weight:600; padding:4px 10px; border-radius:20px;
+  background:var(--panel-2); border:1px solid var(--line-2); color:var(--txt-2);
+}
+.chip.status-done{color:#1E7A4C; border-color:#BFE7D0; background:#E6F6ED;}
+.chip.status-active{color:#6B4FE0; border-color:#DCD0FA; background:#F1ECFF;}
+.chip.status-pending{color:#92650A; border-color:#F5DFAE; background:#FFF3DC;}
+.chip.status-open{color:var(--txt-2);}
+
+.panel-body{padding:18px 20px;}
+.section-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
+.section-head .eyebrow{margin:0;}
+.section-count{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); font-weight:600;}
+
+.lz-list{display:flex; flex-direction:column; gap:2px; margin-bottom:18px;}
+.lz-item{
+  display:flex; align-items:flex-start; gap:10px; text-align:left; width:100%;
+  background:none; border:none; border-radius:8px; padding:9px 8px; cursor:pointer;
+  transition:background .15s var(--ease);
+}
+.lz-item:hover:not(:disabled){background:var(--panel-2);}
+.lz-item:disabled{cursor:default;}
+.lz-item:focus-visible{outline:2px solid var(--violet); outline-offset:-2px;}
+.lz-box{
+  width:17px; height:17px; border-radius:5px; border:1.5px solid var(--line-2); flex-shrink:0; margin-top:2px;
+  display:flex; align-items:center; justify-content:center; transition:background .15s var(--ease), border-color .15s var(--ease);
+}
+.lz-box.checked{border-color:transparent;}
+.lz-box svg{width:11px; height:11px; opacity:0; transition:opacity .1s;}
+.lz-box.checked svg{opacity:1;}
+.lz-main{flex:1; min-width:0;}
+.lz-code{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--muted); display:block; margin-bottom:2px; font-weight:600;}
+.lz-code.checked{color:var(--nc, var(--violet));}
+.lz-text{font-size:12.5px; color:var(--txt-2); line-height:1.42;}
+.lz-item:disabled .lz-text{color:var(--txt-2);}
+.lz-tax{
+  flex-shrink:0; font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:700;
+  color:var(--muted); background:var(--panel-2); border:1px solid var(--line); border-radius:20px;
+  padding:2px 7px; margin-top:2px; align-self:flex-start;
+}
+
+.fb-mini{display:flex; flex-direction:column; gap:8px; margin-bottom:18px;}
+.fb-mini-card{background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:10px 12px;}
+.fb-mini-top{display:flex; align-items:center; gap:8px; margin-bottom:5px; flex-wrap:wrap;}
+.fb-date{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--muted);}
+.fb-person{font-size:11.5px; font-weight:600; color:var(--txt);}
+.fb-art-chip{font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px;}
+.fb-art-chip.anerkennung{background:#E6F6ED; color:#1E7A4C;}
+.fb-art-chip.entwicklungsimpuls{background:#F1ECFF; color:#6B4FE0;}
+.fb-mini-text{font-size:12px; color:var(--txt-2); line-height:1.45; margin:0;}
+
+.panel-foot{padding:16px 20px 20px; border-top:1px solid var(--line); margin-top:auto;}
+.btn-primary{
+  width:100%; padding:12px 16px; border-radius:7px; border:none; cursor:pointer;
+  font-family:'Inter',sans-serif; font-weight:700; font-size:13.5px; color:#2f3e46;
+  background:linear-gradient(135deg,#FBBF54,var(--violet)); transition:filter .16s var(--ease), transform .1s var(--ease);
+}
+.btn-primary:hover:not(:disabled){filter:brightness(1.05);}
+.btn-primary:active:not(:disabled){transform:scale(.98);}
+.btn-primary:disabled{background:var(--panel-2); color:var(--muted); cursor:default;}
+.btn-primary:focus-visible{outline:2px solid var(--txt); outline-offset:2px;}
+.foot-hint{font-size:11.5px; color:var(--muted); margin:9px 0 0; line-height:1.5; text-align:center;}
+.foot-hint b{color:var(--txt-2); font-weight:700;}
+.readonly-hint{font-size:12px; color:var(--muted); text-align:center; padding:8px 0;}
+
+/* ---------- Feedback / Badges / Cockpit views ---------- */
+.view-inner{max-width:920px; margin:0 auto; padding:32px 28px 60px;}
+.view-header h1{font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:24px; margin:0 0 6px;}
+.view-header p.lead{color:var(--txt-2); font-size:13.5px; max-width:560px; margin:0 0 22px; line-height:1.55;}
+
+.plain-banner{
+  display:flex; align-items:center; gap:10px; background:var(--panel-2); border:1px solid var(--line-2);
+  border-radius:8px; padding:11px 15px; margin-bottom:22px; font-size:12.5px; color:var(--txt-2);
+}
+.plain-banner b{color:var(--txt);}
+
+.fb-cards{display:flex; flex-direction:column; gap:14px;}
+.fb-card{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px 20px; position:relative;}
+.fb-card.unread{border-color:var(--violet);}
+.fb-top{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px;}
+.fb-new{font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:700; letter-spacing:.1em; color:#fff; background:var(--violet); padding:2px 8px; border-radius:20px;}
+.fb-comp-chip{font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; background:var(--panel-2); border:1px solid var(--line-2);}
+.fb-dl{display:flex; flex-direction:column; gap:11px; margin:0 0 14px;}
+.fb-dl dt{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; font-weight:600;}
+.fb-dl dd{margin:0; font-size:13px; color:var(--txt-2); line-height:1.55;}
+.btn-secondary{
+  padding:8px 14px; border-radius:7px; border:1px solid var(--line-2); background:var(--panel-2);
+  color:var(--txt); font-weight:600; font-size:12px; cursor:pointer; font-family:'Inter',sans-serif;
+}
+.btn-secondary:hover{background:var(--line-2);}
+.btn-secondary.read{color:var(--muted); cursor:default;}
+.btn-secondary:focus-visible{outline:2px solid var(--violet); outline-offset:2px;}
+
+.badge-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(196px,1fr)); gap:16px;}
+.badge-card{
+  position:relative; background:var(--panel); border:1px solid var(--line); border-radius:10px;
+  padding:20px 16px 16px; text-align:center; overflow:hidden;
+}
+.badge-card.earned{border-color:var(--bc,var(--gold));}
+.badge-card.earned::before{
+  content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--bc,var(--gold)) 18%, transparent), transparent 70%);
+}
+.badge-card.grade{border-style:dashed;}
+.rarity-chip{
+  position:absolute; top:10px; right:10px; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; padding:2px 7px; border-radius:20px; color:var(--bc,var(--muted));
+  background:var(--panel-2); border:1px solid var(--line-2);
+}
+.medal{
+  width:64px; height:64px; margin:6px auto 12px; position:relative; filter:drop-shadow(0 4px 10px rgba(0,0,0,.4));
+}
+.badge-card:not(.earned) .medal{opacity:.5;}
+.medal-emoji{font-size:26px; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);}
+.badge-card:not(.earned) .medal-emoji{filter:grayscale(1) opacity(.35);}
+.badge-title{font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:13.5px; margin:0 0 6px; position:relative;}
+.badge-card:not(.earned) .badge-title{color:var(--muted);}
+.badge-desc{font-size:11.5px; color:var(--txt-2); line-height:1.45; margin:0 0 10px; position:relative;}
+.badge-card:not(.earned) .badge-desc{color:var(--muted);}
+.badge-status{font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); position:relative;}
+.badge-card.earned .badge-status{color:var(--bc,var(--gold)); font-weight:700;}
+
+/* ---------- Cockpit ---------- */
+.kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:26px;}
+.kpi-card{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 18px;}
+.kpi-card.alert{border-color:var(--alert);}
+.kpi-num{font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:26px; margin-bottom:3px;}
+.kpi-card.alert .kpi-num{color:var(--alert);}
+.kpi-label{font-size:12px; font-weight:600; color:var(--txt);}
+.kpi-sub{font-size:11px; color:var(--muted); margin-top:2px;}
+
+.cockpit-grid{display:grid; grid-template-columns:1.6fr 1fr; gap:20px; align-items:start;}
+.cockpit-table-card{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px 20px; overflow-x:auto;}
+.cockpit-table-card h2{font-family:'Chakra Petch',sans-serif; font-size:14px; margin:0 0 14px;}
+table.roster{width:100%; border-collapse:collapse; font-size:12.5px;}
+table.roster th{text-align:left; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600; padding:0 10px 10px 0; border-bottom:1px solid var(--line);}
+table.roster td{padding:11px 10px 11px 0; border-bottom:1px solid var(--line); vertical-align:middle;}
+table.roster tr.flag td:first-child{position:relative;}
+.roster-person{display:flex; align-items:center; gap:10px;}
+.initials{width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; color:#0A0E1C; flex-shrink:0;}
+.person-meta{line-height:1.3;}
+.person-name{font-weight:600; color:var(--txt); display:flex; align-items:center; gap:6px;}
+.flag-dot{width:7px; height:7px; border-radius:50%; background:var(--alert); flex-shrink:0;}
+.person-role{font-size:11px; color:var(--muted);}
+.roster-progress{display:flex; align-items:center; gap:8px;}
+.rp-track{width:70px; height:6px; border-radius:20px; background:var(--line); overflow:hidden;}
+.rp-fill{height:100%; border-radius:20px;}
+.rp-pct{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--txt-2); width:34px;}
+.last-fb{color:var(--txt-2); font-size:12px;}
+
+.rules-card{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px 20px;}
+.rules-card h2{font-family:'Chakra Petch',sans-serif; font-size:14px; margin:0 0 6px;}
+.rule-row{display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:13px 0; border-bottom:1px solid var(--line);}
+.rule-row:last-child{border-bottom:none;}
+.rule-text{flex:1;}
+.rule-title{font-weight:600; font-size:12.5px; color:var(--txt); margin-bottom:3px;}
+.rule-desc{font-size:11.5px; color:var(--muted); line-height:1.4;}
+
+/* ---------- Toasts ---------- */
+.toast-stack{position:fixed; bottom:20px; right:20px; display:flex; flex-direction:column; gap:10px; z-index:100; width:320px; max-width:88vw;}
+.toast{
+  display:flex; align-items:center; gap:12px; background:var(--panel); border:1px solid var(--line-2);
+  border-radius:10px; padding:12px 14px; box-shadow:0 10px 30px rgba(0,0,0,.4);
+  animation:toastIn .28s var(--ease); transition:opacity .3s var(--ease), transform .3s var(--ease);
+}
+.toast.badge{border-color:var(--gold); box-shadow:0 10px 30px rgba(232,163,61,.15);}
+.toast.leaving{opacity:0; transform:translateX(20px);}
+@keyframes toastIn{from{opacity:0; transform:translateX(24px);} to{opacity:1; transform:translateX(0);}}
+.toast-icon{width:36px; height:36px; flex-shrink:0; position:relative; display:flex; align-items:center; justify-content:center;}
+.toast-icon svg{width:100%; height:100%; position:absolute;}
+.toast-icon span{position:relative; font-size:16px;}
+.toast-body .eyebrow{margin-bottom:2px;}
+.toast-title{font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12.5px; line-height:1.3;}
+
+/* ---------- Modal ---------- */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(4,6,14,.72); backdrop-filter:blur(3px);
+  display:flex; align-items:center; justify-content:center; z-index:200; padding:20px;
+  opacity:0; pointer-events:none; transition:opacity .2s var(--ease);
+}
+.modal-overlay.open{opacity:1; pointer-events:auto;}
+.modal{
+  background:var(--panel); border:1px solid var(--line-2); border-radius:12px; width:480px; max-width:100%;
+  max-height:88vh; overflow-y:auto; transform:translateY(12px); transition:transform .22s var(--ease);
+}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-head{padding:22px 24px 16px; border-bottom:1px solid var(--line);}
+.modal-title{font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:18px; margin:8px 0 4px;}
+.modal-sub{font-size:12.5px; color:var(--txt-2); margin:0;}
+.modal-body{padding:20px 24px;}
+.field{margin-bottom:16px;}
+.field label{display:block; font-size:12.5px; font-weight:600; color:var(--txt); margin-bottom:7px;}
+.field label .req{color:var(--alert);}
+.field textarea{
+  width:100%; min-height:64px; resize:vertical; background:var(--bg-2); border:1.5px solid var(--line-2);
+  border-radius:7px; padding:10px 12px; color:var(--txt); font-family:'Inter',sans-serif; font-size:13px;
+  transition:border-color .16s var(--ease);
+}
+.field textarea::placeholder{color:var(--muted);}
+.field textarea:focus{outline:none; border-color:var(--violet);}
+.field.error textarea{border-color:var(--alert);}
+.field-error{color:var(--alert); font-size:11.5px; margin-top:6px; display:none;}
+.field.error .field-error{display:block;}
+.art-toggle{display:flex; gap:8px;}
+.art-btn{
+  flex:1; padding:10px 12px; border-radius:7px; border:1.5px solid var(--line-2); background:var(--bg-2);
+  color:var(--txt-2); font-weight:600; font-size:12.5px; cursor:pointer; font-family:'Inter',sans-serif;
+  transition:border-color .16s var(--ease), color .16s var(--ease), background .16s var(--ease);
+}
+.art-btn.sel{border-color:var(--violet); color:#8A5A0C; background:#FDECC8;}
+.art-btn:focus-visible{outline:2px solid var(--violet); outline-offset:2px;}
+.modal-foot{padding:16px 24px 22px; display:flex; gap:10px; justify-content:flex-end; border-top:1px solid var(--line);}
+.btn-ghost{
+  padding:11px 18px; border-radius:7px; border:1px solid var(--line-2); background:none; color:var(--txt-2);
+  font-weight:600; font-size:13px; cursor:pointer; font-family:'Inter',sans-serif;
+}
+.btn-ghost:hover{background:var(--panel-2); color:var(--txt);}
+.btn-ghost:focus-visible{outline:2px solid var(--violet); outline-offset:2px;}
+.modal .btn-primary{width:auto; padding:11px 18px;}
+
+/* ---------- Responsive ---------- */
+@media (max-width:999px){
+  .detail-panel{position:fixed; top:auto; bottom:0; right:0; left:0; width:auto; max-width:none; height:70vh;
+    transform:translateY(100%); border-left:none; border-top:1px solid var(--line); border-radius:16px 16px 0 0;}
+  .detail-panel.open{transform:translateY(0);}
+  .overlay-card{width:170px;}
+  .kpi-row{grid-template-columns:repeat(2,1fr);}
+  .cockpit-grid{grid-template-columns:1fr;}
+  .xp-block{display:none;}
+}
+@media (max-width:640px){
+  header{gap:10px; padding:10px 12px; flex-wrap:wrap;}
+  .toggle-label{display:none;}
+  .role-btn{padding:6px 8px; font-size:10.5px;}
+  nav.tabs{padding:0 8px; overflow-x:auto;}
+  .view-inner{padding:20px 16px 50px;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important; transition-duration:.01ms !important;}
+}
+
+::-webkit-scrollbar{width:9px; height:9px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--line-2); border-radius:20px;}
+
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <div class="wordmark">
+      <div class="wordmark-badge">
+        <svg viewBox="0 0 34 34"><defs><linearGradient id="wm-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FBBF54"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs>
+        <polygon points="17,1 31,9 31,25 17,33 3,25 3,9" fill="url(#wm-grad)"/>
+        <text x="17" y="23" text-anchor="middle" font-family="'Chakra Petch',sans-serif" font-weight="700" font-size="16" fill="#2f3e46">L</text></svg>
+      </div>
+      <div class="wordmark-text">
+        <span class="name">LERNPFAD</span>
+        <span class="sub">Ausbildungsbegleitung BIT</span>
+      </div>
+    </div>
+    <span class="chip-prototyp">PROTOTYP</span>
+    <div class="spacer"></div>
+    <div class="xp-block">
+      <div class="xp-text">
+        <span class="xp-level" id="xp-level">Stufe 1 · 2. Lehrjahr</span>
+        <span class="xp-num mono" id="xp-num">0 XP</span>
+      </div>
+      <div class="xp-bar-track"><div class="xp-bar-fill" id="xp-bar-fill" style="width:0%"></div></div>
+    </div>
+    <div class="toggle-block">
+      <span class="toggle-label">Spielelemente</span>
+      <button class="switch on" id="game-switch" role="switch" aria-checked="true" aria-label="Spielelemente umschalten"></button>
+    </div>
+    <div class="role-switch">
+      <button class="role-btn active" data-role="lernende">Lernende</button>
+      <button class="role-btn" data-role="praxis">Praxisbildner</button>
+      <button class="role-btn" data-role="hr">Nachwuchsförderung</button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <main>
+    <div class="view" id="view-tree">
+      <div class="tree-canvas" id="tree-canvas">
+        <svg id="tree-svg" viewBox="0 0 1320 840" preserveAspectRatio="xMidYMid meet">
+          <g id="viewport"></g>
+        </svg>
+
+        <div class="overlay-stack">
+          <div class="overlay-card progress-card">
+            <div class="eyebrow">HANDLUNGSKOMPETENZEN</div>
+            <div class="progress-num-row"><span class="progress-num" id="progress-num">0</span><span class="progress-den">/ 25</span></div>
+            <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+          </div>
+          <div class="overlay-card legend-card">
+            <div class="legend-row"><svg class="legend-hex" viewBox="0 0 14 14"><polygon points="7,0.5 13,4 13,10.5 7,13.5 1,10.5 1,4" fill="#E8A33D"/></svg>Begleiten von ICT-Projekten</div>
+            <div class="legend-row"><svg class="legend-hex" viewBox="0 0 14 14"><polygon points="7,0.5 13,4 13,10.5 7,13.5 1,10.5 1,4" fill="#37BDD8"/></svg>Unterstützen und Beraten</div>
+            <div class="legend-row"><svg class="legend-hex" viewBox="0 0 14 14"><polygon points="7,0.5 13,4 13,10.5 7,13.5 1,10.5 1,4" fill="#31C489"/></svg>Aufbauen und Pflegen von Daten</div>
+            <div class="legend-row"><svg class="legend-hex" viewBox="0 0 14 14"><polygon points="7,0.5 13,4 13,10.5 7,13.5 1,10.5 1,4" fill="#9B7BF7"/></svg>Entwickeln von Applikationen</div>
+            <div class="legend-row"><svg class="legend-hex" viewBox="0 0 14 14"><polygon points="7,0.5 13,4 13,10.5 7,13.5 1,10.5 1,4" fill="#F0703C"/></svg>Ausliefern und Betreiben</div>
+          </div>
+        </div>
+
+        <div id="locked-toast-host"></div>
+
+        <div class="zoom-controls">
+          <button class="zoom-btn" id="zoom-out" aria-label="Verkleinern">−</button>
+          <button class="zoom-btn" id="zoom-reset" aria-label="Ansicht zurücksetzen">⌂</button>
+          <button class="zoom-btn" id="zoom-in" aria-label="Vergrössern">+</button>
+        </div>
+      </div>
+
+      <div class="detail-panel open" id="detail-panel"></div>
+    </div>
+
+    <div class="view" id="view-feedback"></div>
+    <div class="view" id="view-badges"></div>
+    <div class="view" id="view-cockpit"></div>
+  </main>
+
+</div>
+
+<div class="toast-stack" id="toast-stack"></div>
+<div class="modal-overlay" id="modal-overlay"></div>
+
+<script>
+const AREAS = {
+  a:{name:"Begleiten von ICT-Projekten", color:"#E8A33D", dark:"#2A1F08"},
+  b:{name:"Unterstützen und Beraten", color:"#37BDD8", dark:"#07222A"},
+  c:{name:"Aufbauen und Pflegen von Daten", color:"#31C489", dark:"#082418"},
+  g:{name:"Entwickeln von Applikationen", color:"#9B7BF7", dark:"#1B1440"},
+  h:{name:"Ausliefern und Betreiben", color:"#F0703C", dark:"#2A1408"}
+};
+
+const NODES = {
+  a1:{x:320,y:165,label:"Bedürfnisse\nabklären",dep:["root"]},
+  a2:{x:470,y:100,label:"Vorgehens-\nmodell",dep:["a1"]},
+  a3:{x:470,y:230,label:"Innovationen\nrecherchieren",dep:["a1"]},
+  a4:{x:620,y:165,label:"Projekt\nplanen",dep:["a2","a3"]},
+  a5:{x:770,y:105,label:"Varianten\npräsentieren",dep:["a4"]},
+  a6:{x:770,y:228,label:"Fortschritt\nrapportieren",dep:["a4"]},
+  a7:{x:920,y:165,label:"Übergabe &\nAbschluss",dep:["a5","a6"]},
+  b1:{x:300,y:312,label:"Arbeitsplatz\neinrichten",dep:["root"]},
+  b2:{x:452,y:348,label:"Support-\nanfragen",dep:["b1"]},
+  b3:{x:620,y:308,label:"Datenschutz\nberaten",dep:["b2"]},
+  b4:{x:790,y:342,label:"Geschäfts-\nprozesse",dep:["b3"]},
+  g1:{x:340,y:442,label:"Anforderungen\nanalysieren",dep:["root"]},
+  g3:{x:492,y:396,label:"Sicherheit\nbeurteilen",dep:["g1","b3"]},
+  g2:{x:492,y:492,label:"Benutzer-\nschnittstellen",dep:["g1"]},
+  g4:{x:642,y:446,label:"Umsetzungs-\nvarianten",dep:["g2","g3","a4"]},
+  g5:{x:792,y:496,label:"Implemen-\ntieren",dep:["g4","c2"]},
+  g6:{x:942,y:446,label:"Qualität\nprüfen",dep:["g5"]},
+  c1:{x:330,y:582,label:"Datenmodelle\nentwickeln",dep:["root"]},
+  c2:{x:482,y:620,label:"Datenspeicher\numsetzen",dep:["c1"]},
+  c3:{x:642,y:580,label:"Daten-\nsicherheit",dep:["c2"]},
+  c4:{x:800,y:618,label:"Daten\naufbereiten",dep:["c3"]},
+  h1:{x:420,y:736,label:"Plattform\nbestimmen",dep:["root"]},
+  h2:{x:572,y:764,label:"Auslieferung\ndefinieren",dep:["h1"]},
+  h3:{x:722,y:734,label:"Auslieferung\ndurchführen",dep:["h2","g6"]},
+  h4:{x:878,y:762,label:"Betrieb &\nÜberwachung",dep:["h3"]}
+};
+
+const ROOT = {x:110,y:420,label:"Basis-\nlehrjahr",code:"BBC"};
+const GOAL = {x:1180,y:420,label:"Individuelle\npraktische Arbeit",code:"IPA",
+  dep:["a7","b4","g6","c4","h4"]};
+
+let FEEDBACK = [
+  {id:1,hk:"g2",date:"19.08.2026",art:"Entwicklungsimpuls",read:false,
+    good:"Der Entwurf für die Benutzeroberfläche war technisch sauber durchdacht, besonders die Aufteilung in wiederverwendbare Komponenten.",
+    better:"Die Barrierefreiheit kam noch zu kurz. Kontraste und Fokusreihenfolge sollten von Anfang an mitgedacht werden.",
+    next:"Nimm dir für den nächsten Entwurf die Accessibility-Richtlinien der Bundesverwaltung als Checkliste."},
+  {id:2,hk:"b2",date:"11.08.2026",art:"Anerkennung",read:false,
+    good:"Du hast eine komplexe Supportanfrage eigenständig bis zur Lösung geführt und sie so dokumentiert, dass der Second Level sie direkt nutzen konnte.",
+    better:"",
+    next:"Bring den Fall in die nächste Teamrunde ein, davon haben die anderen etwas."},
+  {id:3,hk:"c1",date:"02.07.2026",art:"Anerkennung",read:true,
+    good:"Das Datenmodell war nach dem zweiten Durchgang vollständig normalisiert und gut nachvollziehbar dokumentiert.",
+    better:"Beim ersten Entwurf fehlten die Testfälle für die Datenkorrektheit.",
+    next:"Beim nächsten Modell die Testfälle direkt mitplanen, nicht nachträglich."}
+];
+
+const BADGES = [
+  {id:"m1",title:"Erster Schritt",desc:"Erste Handlungskompetenz abgeschlossen",emoji:"🌱",tier:"Bronze",color:"#C98B45"},
+  {id:"m2",title:"Grundlagen gelegt",desc:"Fünf Handlungskompetenzen abgeschlossen",emoji:"⚙️",tier:"Bronze",color:"#C98B45"},
+  {id:"m3",title:"Lernjournal-Serie",desc:"Zwölf Wochen ohne Lücke dokumentiert",emoji:"📘",tier:"Silber",color:"#9FB3D9"},
+  {id:"m4",title:"Basislehrjahr bestanden",desc:"Ausbildung im BBC abgeschlossen",emoji:"🎓",tier:"Silber",color:"#9FB3D9"},
+  {id:"m5",title:"Applikationen I",desc:"Anforderungen, Schnittstellen und Sicherheit erarbeitet",emoji:"🧩",tier:"Gold",color:"#E8A33D"},
+  {id:"m6",title:"Zweistellig",desc:"Zehn Handlungskompetenzen abgeschlossen",emoji:"🔟",tier:"Gold",color:"#E8A33D"},
+  {id:"m7",title:"Datenprofi",desc:"Alle Kompetenzen im Bereich Daten abgeschlossen",emoji:"🗄️",tier:"Gold",color:"#E8A33D"},
+  {id:"m8",title:"Projektbegleiter",desc:"Alle Kompetenzen im Bereich ICT-Projekte abgeschlossen",emoji:"🧭",tier:"Gold",color:"#E8A33D"},
+  {id:"m9",title:"Bereit für die IPA",desc:"Alle 25 Handlungskompetenzen abgeschlossen",emoji:"🏆",tier:"Platin",color:"#7FE3C4"},
+  {id:"m10",title:"Jahrgang 2026 «Phoenix»",desc:"Vom Jahrgang selbst gestaltet. Entwurf bis Ende Semester einreichen.",emoji:"🔥",tier:"Jahrgang",color:"#F0703C",grade:true}
+];
+
+const ROSTER = [
+  {name:"Anna Meier",year:"3. Lehrjahr",role:"Applikationsentwicklung",progress:64,last:"vor 4 Tagen",color:"#9B7BF7",flag:false},
+  {name:"Luca Bernasconi",year:"2. Lehrjahr",role:"Applikationsentwicklung",progress:36,last:"vor 6 Tagen",color:"#37BDD8",flag:false},
+  {name:"Jana Keller",year:"4. Lehrjahr",role:"Plattformentwicklung",progress:88,last:"vor 2 Tagen",color:"#31C489",flag:false},
+  {name:"Kevin Müller",year:"2. Lehrjahr",role:"Applikationsentwicklung",progress:31,last:"vor 34 Tagen",color:"#F0703C",flag:true},
+  {name:"Sara Wyss",year:"1. Lehrjahr",role:"Basislehrjahr BBC",progress:12,last:"vor 9 Tagen",color:"#E8A33D",flag:false},
+  {name:"Nils Frei",year:"3. Lehrjahr",role:"Mediamatik",progress:58,last:"vor 5 Tagen",color:"#9FB3D9",flag:false}
+];
+
+const RULES = [
+  {title:"Keine Rückmeldung seit 30 Tagen",desc:"Meldung an Praxisbildende und Berufsbildung",on:true},
+  {title:"Fortschritt unter Jahrgangsschnitt",desc:"Hinweis im Cockpit, keine Meldung an Lernende",on:true},
+  {title:"Lernbericht überfällig",desc:"Erinnerung an Lernende, wöchentlich",on:true},
+  {title:"Kompetenz seit 90 Tagen in Arbeit",desc:"Hinweis im Cockpit",on:false}
+];
+
+/* Hinweis zur Konsistenz: g4 hängt laut Abschnitt 6.2 von g2, g3 UND a4 ab.
+   Damit der Durchstich (Abschnitt 8) beim Abschluss von g3 exakt eine
+   Freischaltung (g4) auslöst, muss a4 zu diesem Zeitpunkt bereits
+   abgeschlossen sein - sonst bliebe g4 trotz erfüllter g3 gesperrt.
+   a4 wird daher hier zusätzlich als abgeschlossen geführt; c2 bleibt wie
+   beschrieben nur angefangen (blockiert weiterhin g5, wie vorgesehen). */
+const DONE_START = ["a1","a2","a3","a4","b1","b2","c1","g1","g2"];
+
+</script>
+<script>
+const HK = {"a1":{"n":"Bedürfnisse von Stakeholdern im Rahmen eines ICT-Projekts abklären und dokumentieren","lz":[{"c":"a1.1","t":"Sie klären Projektziele und übergeordnete Parameter wie Kosten, Zeit, Qualität, Umfang, Verantwortlichkeiten und Methodik eines ICT-Projektes ab.","k":"K3"},{"c":"a1.2","t":"Sie wenden verschiedene Befragungstechniken und Beobachtungstechniken an (z.B. offene, geschlossene Fragen, Meeting, Workshop, Shadowing, Simulation der anzustrebenden Lösung in Form eines Zeitsprungs).","k":"K5"},{"c":"a1.3","t":"Sie analysieren den Systemkontext, nehmen eine System- und Kontextabgrenzung vor und identifizieren Schnittstellen.","k":"K4"},{"c":"a1.4","t":"Sie erarbeiten Lösungen zur Beseitigung möglicher Zielkonflikte.","k":"K5"},{"c":"a1.5","t":"Sie überführen die natürlich sprachige Definition (der Stakeholder) in eine modellbasierte Dokumentation mit eindeutigen, referenzierbaren Projektziele und -anforderungen.","k":"K5"},{"c":"a1.6","t":"Sie überprüfen die Projektziele und -anforderungen bezüglich Messbarkeit, Konsistenz, Vollständigkeit, Notwendigkeit, Korrektheit und Referenzierbarkeit.","k":"K4"},{"c":"a1.7","t":"Sie definieren die Eigenschaften für die Verwaltung der einzelnen Projektziele und -anforderungen (z.B. Versionierung, Identifikator zur Referenzierbarkeit, Beschreibung, Autor, Quelle, Kritikalität, Priorität).","k":"K3"}]},"a2":{"n":"Vorgehensmodell für ein ICT-Projekt bestimmen","lz":[{"c":"a2.1","t":"Sie analysieren die vom Auftraggeber gegebenen Konditionen und Parameter.","k":"K4"},{"c":"a2.2","t":"Sie wägen die Vor- und Nachteile von verschiedenen plangetriebenen resp. agilen (itera-tiven, inkrementellen) Vorgehensmodellen in Bezug auf ein ICT-Projekt ab und wählen ein passendes Modell.","k":"K4"},{"c":"a2.3","t":"Sie passen ein Vorgehensmodell projektspezifisch an (Process-Tailoring).","k":"K5"}]},"a3":{"n":"Informationen zu ICT-Lösungen und zu Innovationen recherchieren","lz":[{"c":"a3.1","t":"Sie suchen gezielt und systematisch nach Informationen aus digitalen und analogen Quellen.","k":"K4"},{"c":"a3.2","t":"Sie identifizieren verlässliche Quellen.","k":"K4"},{"c":"a3.3","t":"Sie vergleichen mehrere Varianten aus den Ergebnissen und bewerten sie.","k":"K3"},{"c":"a3.4","t":"Sie zeigen technische Potenziale und Risiken von Varianten auf.","k":"K3"},{"c":"a3.5","t":"Sie erstellen ein technisches Proof of Concept (PoC).","k":"K5"}]},"a4":{"n":"ICT-Projekte und daraus entstehende Aufgaben gemäss Vorgehensmodell planen","lz":[{"c":"a4.1","t":"Sie teilen eine Gesamtaufgabe in kleinere, besser einschätzbare und einer Ressource zu-teilbare Aktivitäten auf.","k":"K3"},{"c":"a4.2","t":"Sie identifizieren Aktivitäten nach Typ Aufwand oder Dauer.","k":"K4"},{"c":"a4.3","t":"Sie schätzen Aufwand, Dauer und Komplexitätsgrad von Aktivitäten ab.","k":"K4"},{"c":"a4.4","t":"Sie klären die sequenziellen Abhängigkeiten von Aktivitäten und definieren die zeitliche Reihenfolge.","k":"K4"},{"c":"a4.5","t":"Sie gruppieren und priorisieren Aktivitäten zur Erreichung eines Zwischenziels anhand von zeitlichen oder funktionellen Vorgaben.","k":"K3"}]},"a5":{"n":"Varianten für ICT-Lösungen visualisieren und präsentieren","lz":[{"c":"a5.1","t":"Sie identifizieren die Zielgruppe und deren Informationsbedürfnisse zu einer ICT-Lösung gemäss Anforderungskatalog.","k":"K4"},{"c":"a5.2","t":"Sie identifizieren die zielgruppenrelevanten Merkmale einer ICT-Lösung.","k":"K4"},{"c":"a5.2","t":"Sie identifizieren die zielgruppenrelevanten Merkmale einer ICT-Lösung.","k":"K4"},{"c":"a5.3","t":"Sie bereiten die aus den Merkmalen gewonnenen Erkenntnisse zielgruppen- und prob-lemgerecht visuell auf (z.B. Flipchart, Whiteboard, Präsentationsprogramm, Videoconferencing).","k":"K5"},{"c":"a5.4","t":"Sie präsentieren ihre Lösungsvorschläge schlüssig und überzeugend (z.B. durch Storytel-ling).","k":"K5"}]},"a6":{"n":"Fortschritt von ICT-Projekten und daraus entstehenden Aufgaben gemäss Vorgehensmodell überprüfen und rapportieren","lz":[{"c":"a6.2","t":"Sie kategorisieren und priorisieren gesammelte Bewertungen.","k":"K4"},{"c":"a6.3","t":"Sie konsolidieren die Bewertungen und erarbeiten ggf. Vorschläge für Korrekturmass nahmen.","k":"K5"},{"c":"a6.4","t":"Sie halten den Fortschritt schriftlich fest und stellen ihn visuell dar.","k":"K3"},{"c":"a6.5","t":"Sie rapportieren die zusammengefassten Ergebnisse zum Projektfortschritt gemäss pro jektspezifischem Vorgehensmodell.","k":"K3"}]},"a7":{"n":"ICT-Lösungen der Kundin oder dem Kunden übergeben und Projekt abschliessen","lz":[{"c":"a7.1","t":"Sie eruieren die einzubeziehenden Personen beim Kunden.","k":"K3"},{"c":"a7.2","t":"Sie legen zusammen mit dem Kunden die Abnahmekriterien und -verfahren sowie den zeitlichen Ablauf der Übergabe fest.","k":"K3"},{"c":"a7.3","t":"Sie stellen die gemäss Projektauftrag vereinbarte Dokumentation bereit.","k":"K3"},{"c":"a7.4","t":"Sie planen eine Schulung/Instruktion.","k":"K3"},{"c":"a7.5","t":"Sie bereiten die Schulungsunterlagen vor.","k":"K5"},{"c":"a7.6","t":"Sie führen eine Abnahme nach festgelegten Kriterien durch und protokollieren sie.","k":"K3"},{"c":"a7.7","t":"Sie archivieren und sichern ihre Arbeiten nach betriebsspezifischen Vorgaben.","k":"K3"}]},"b1":{"n":"Den eigenen ICT-Arbeitsplatz einrichten","lz":[{"c":"b1.1","t":"Sie setzen einen Computer mit einem Betriebssystem auf.","k":"K3"},{"c":"b1.2","t":"Sie verbinden den Computer mit einem Netzwerk und testen die Verbindung.","k":"K3"},{"c":"b1.3","t":"Sie konfigurieren die nötigen Sicherheitsmassnahmen (Firewall, Antivirensysteme etc.) gemäss Firmenrichtlinien.","k":"K3"},{"c":"b1.4","t":"Sie installieren Software, testen sie und führen bei Bedarf Updates aus.","k":"K3"},{"c":"b1.5","t":"Sie verbinden den Computer mit den zu verwendenden Peripheriegeräten und testen deren Funktionalitäten.","k":"K3"},{"c":"b1.6","t":"Sie richten ihren Bürotisch und -stuhl nach ergonomischen Grundsätzen ein.","k":"K3"}]},"b2":{"n":"Komplexe ICT-Supportanfragen entgegennehmen und bearbeiten","lz":[{"c":"b2.1","t":"Sie analysieren komplexe Anfragen systematisch (z.B. mit Hilfe eines Fragenkatalogs oder einer Checkliste).","k":"K4"},{"c":"b2.2","t":"Sie führen mit geeigneten Methoden oder Kollaborationen Lösungen herbei.","k":"K5"},{"c":"b2.3","t":"Sie dokumentieren Lösungen nach betriebsspezifischen Vorgaben.","k":"K3"},{"c":"b2.4","t":"Sie bereiten Lösungen für eine Anfrage zielgruppengerecht (z.B. für den 2nd Level Support) auf und kommunizieren sie.","k":"K3"}]},"b3":{"n":"Kundinnen und Kunden in Bezug auf Datenschutz und Datensicherheit beraten","lz":[{"c":"b3.1","t":"Sie klären anhand von gezielten Fragen die Sicherheitssituation beim Kunden in Bezug auf System, Netzwerk, Software und Daten.","k":"K3"},{"c":"b3.2","t":"Sie informieren Kunden über Gefahren im Netz und den Umgang mit schützenswerten Daten.","k":"K3"},{"c":"b3.3","t":"Sie schlagen dem Kunden nötige und empfohlene Schutzmassnahmen in den evaluierten Bereichen vor.","k":"K5"},{"c":"b3.4","t":"Sie schulen Mitarbeitende in der Anwendung der firmeneigenen IT-Richtlinien.","k":"K5"}]},"b4":{"n":"Geschäftsprozesse von Kundinnen und Kunden analysieren, visualisieren und dokumentieren","lz":[{"c":"b4.1","t":"Sie identifizieren relevante Prozessinformationen (Bezeichnung, auslösendes Ereignis, Ergebnis, Auslöser, Empfänger).","k":"K4"},{"c":"b4.2","t":"Sie zerlegen einen Geschäftsprozess in einer Aufgabenanalyse in einzelne Prozessschritte.","k":"K4"},{"c":"b4.3","t":"Sie dokumentieren einen Prozessablauf und stellen ihn auf der Basis von anerkannten und üblichen Beschreibungsstandards grafisch dar.","k":"K3"},{"c":"b4.4","t":"Sie präzisieren den Prozessablauf mit Zusatzinformationen wie benötigten Hilfsmitteln, ausführenden Stellen sowie der Beschreibung des zu erzeugenden Outputs (Ergebnis).","k":"K3"}]},"c1":{"n":"Daten identifizieren, analysieren und Datenmodelle entwickeln","lz":[{"c":"c1.1","t":"Sie sichten Daten aus verschiedenen strukturierten und unstrukturierten Datenquellen und ordnen sie hinsichtlich des 4V-Modells ein.","k":"K4"},{"c":"c1.2","t":"Sie untersuchen Daten auf Eindeutigkeit und Widersprüchlichkeit und bereinigen sie falls nötig.","k":"K4"},{"c":"c1.3","t":"Sie gewinnen Indikatoren/Anhaltspunkte für die Modellbildung aus bestehenden Auswertungsformen (Reports).","k":"K4"},{"c":"c1.4","t":"Sie bestimmen je nach Datentyp geeignete Testfälle für die Datenkorrektheit.","k":"K3"},{"c":"c1.5","t":"Sie bestimmen eine geeignete Struktur für die bereinigten Daten.","k":"K4"},{"c":"c1.6","t":"Sie normalisieren ein Datenmodell.","k":"K3"},{"c":"c1.7","t":"Sie bilden ein Datenmodell in geeigneter Darstellung ab.","k":"K3"}]},"c2":{"n":"Datenmodelle in einem digitalen Datenspeicher umsetzen","lz":[{"c":"c2.1","t":"Sie wählen einen geeigneten Datenspeicher (z.B. objektrelational, relational, verteilt/zentral).","k":"K3"},{"c":"c2.2","t":"Sie implementieren ein normalisiertes Datenmodell für die Speicherung unter Berücksichtigung der referentiellen Integrität.","k":"K3"},{"c":"c2.3","t":"Sie planen Funktions- und Performancetests und bereiten die dazu notwendigen Testdaten vor.","k":"K5"},{"c":"c2.4","t":"Sie führen Funktions- und Performancetests durch.","k":"K3"},{"c":"c2.5","t":"Sie werten Funktions- und Performancetests aus.","k":"K4"},{"c":"c2.6","t":"Sie planen Datenmigrationen aus unterschiedlichen Quellsystemen in ein Zielsystem und führen sie durch.","k":"K5"},{"c":"c2.7","t":"Sie prüfen die migrierten Daten im Zielsystem auf Vollständigkeit, Integrität und Korrektheit.","k":"K4"}]},"c3":{"n":"Datensicherheit und Datenschutz für ICT-Lösungen planen, implementieren und dokumentieren","lz":[{"c":"c3.1","t":"Sie identifizieren schutzwürdige Daten und kategorisieren sie.","k":"K4"},{"c":"c3.2","t":"Sie modellieren schützenswerte Daten gemäss Privacy by design.","k":"K3"},{"c":"c3.3","t":"Sie klären die erforderlichen Schutzmechanismen gemäss Schutzwürdigkeit ab und qualifizieren sie.","k":"K4"},{"c":"c3.4","t":"Sie erarbeiten ein Datensicherheits- und Rollenkonzept gemäss Auftrag.","k":"K3"},{"c":"c3.5","t":"Sie erstellen ein Backup und prüfen die erfolgreiche Wiederherstellung.","k":"K3"},{"c":"c3.6","t":"Sie setzen Zugriffsberechtigungen gemäss Konzept.","k":"K3"},{"c":"c3.7","t":"Sie verschlüsseln Daten gemäss Konzept.","k":"K3"},{"c":"c3.8","t":"Sie überprüfen die eingerichteten Datensicherheits- und Schutzmechanismen in Bezug auf ihre Wirksamkeit.","k":"K4"}]},"c4":{"n":"Daten aus digitalen Datenspeichern aufbereiten","lz":[{"c":"c4.1","t":"Sie lesen Daten in eine geeignete Analysesoftware ein.","k":"K3"},{"c":"c4.2","t":"Sie führen eine explorative Datenanalyse durch und identifizieren mögliche Datenfehler.","k":"K4"},{"c":"c4.3","t":"Sie vergleichen etablierte Aufbereitungsmethoden und Darstellungsformen und bewerten sie.","k":"K4"},{"c":"c4.4","t":"Sie wählen geeignete Darstellungsformen aus und setzen sie ein.","k":"K3"},{"c":"c4.5","t":"Sie prüfen die Validität der aufbereiteten Daten durch Stichproben.","k":"K3"},{"c":"c4.6","t":"Sie stellen Daten anonymisiert bereit.","k":"K3"}]},"g1":{"n":"Anforderungen an Applikationen und Schnittstellen analysieren und dokumentieren","lz":[{"c":"g1.1","t":"Sie halten Kundenbedürfnisse in Form von fachlichen und technischen Anforderungen nach-vollziehbar und lösungsneutral fest. (K3)","k":"K4"},{"c":"g1.2","t":"Sie entwickeln im Team Nutzermodelle anhand von Personas. (K5)","k":"K3"},{"c":"g1.3","t":"Sie überprüfen fachliche und technische Anforderungen auf Konsistenz, Vollständigkeit und Messbarkeit. (K4)","k":"K4"},{"c":"g1.4","t":"Sie katalogisieren Anforderungen nach branchen- oder projektspezifischen Kriterien und hal-ten diese schriftlich fest. (K4)","k":"K3"},{"c":"g1.5","t":"Sie versehen Anforderungen mit einer eindeutigen Bezeichnung. (K3)","k":"K3"},{"c":"g1.6","t":"Sie schätzen Zeitaufwand, Komplexität, Umfang und Priorisierung von Arbeitspaketen im Team ab. (K4)","k":"K3"},{"c":"g1.7","t":"Sie überprüfen die Anforderungen mit relevanten Stakeholdern auf Validität. (K3)","k":"K3"},{"c":"g1.8","t":"Sie dokumentieren fachliche und technische Anforderungen laufend nach. (K3)","k":"K4"}]},"g2":{"n":"Gestaltungsentwürfe für Benutzerschnittstellen auf technische Machbarkeit überprüfen und weiterentwickeln","lz":[{"c":"g2.1","t":"Sie entwickeln Gestaltungsentwürfe für Benutzerschnittstellen anhand von geeigneten grafi-schen Tools und unter Berücksichtigung von Gestaltungsrichtlinien und Vorgaben. (K5)","k":"K3"},{"c":"g2.2","t":"Sie identifizieren problematische Teile von Benutzerschnittstellen. (K4)","k":"K4"},{"c":"g2.3","t":"Sie entwerfen Prototypen von Benutzerschnittstellen. (K4)","k":"K4"},{"c":"g2.4","t":"Sie überprüfen die technische Machbarkeit von Benutzerschnittstellen unter Berücksichtigung relevanter Aspekte. (K4)","k":"K3"},{"c":"g2.5","t":"Sie besprechen mit Stakeholdern Gestaltungsentwürfe und schlagen alternative Lösungen für technisch nicht umsetzbare Teile vor. (K3)","k":"K3"},{"c":"g2.6","t":"Sie entwickeln anhand von Prototypen funktionale Benutzerschnittstellen. (K5)","k":"K3"}]},"g3":{"n":"Sicherheit von Applikationen und Schnittstellen beurteilen und dokumentieren","lz":[{"c":"g3.1","t":"Sie klären sicherheitsrelevante Fragen in Bezug auf ein Systemumfeld vorausschauend und leiten daraus mögliche Risiken ab. (K4)","k":"K3"},{"c":"g3.2","t":"Sie beschaffen sich sicherheitsrelevante Informationen im Team oder in der Community (z.B. OWASP). (K3)","k":"K4"},{"c":"g3.3","t":"Sie halten sicherheitsrelevante Risiken und daraus abgeleitete Massnahmen nachvollziehbar fest. (K3)","k":"K5"},{"c":"g3.4","t":"Sie erläutern Massnahmen zur Sicherung der Applikationen und Schnittstellen im Team. (K3)","k":"K3"},{"c":"g3.5","t":"Sie passen einen Anforderungskatalog entsprechend den Ergebnissen an und Besprechen die-sen mit dem Stakeholder. (K3)","k":"K3"}]},"g4":{"n":"Umsetzungsvarianten für Applikationen entwerfen und Lösung konzeptionell ausarbeiten.","lz":[{"c":"g4.1","t":"Sie zeigen grundlegende Umsetzungsvarianten in Bezug auf die Implementierung anhand von Skizzen und Beschreibungen auf. (K5)","k":"K3"},{"c":"g4.2","t":"Sie erstellen in Zusammenarbeit mit dem Stakeholder eine nachvollziehbare Nutzwertanalyse mit sinnvollen, bewertbaren Entscheidungskriterien. (K4)","k":"K4"},{"c":"g4.3","t":"Sie beraten den Stakeholder bei der Entscheidungsfindung für eine optimale, ethisch und rechtlich vertretbare Lösung. (K5)","k":"K5"},{"c":"g4.4","t":"Sie erarbeiten ein fachliches und technisches Realisierungskonzept anhand von geeigneten Hilfsmitteln. (K5)","k":"K3"},{"c":"g4.5","t":"Sie führen eine Machbarkeitsanalyse für die gewählte Umsetzungsvariante durch. (K4)","k":"K3"}]},"g5":{"n":"Applikationen und Schnittstellen gemäss Entwurf implementieren und dabei die Sicherheitsanforderungen erfüllen","lz":[{"c":"g5.1","t":"Sie richten eine geeignete Entwicklungs- und Laufzeitumgebung anhand des Realisierungs-konzepts sowie Firmenvorgaben ein. (K3)","k":"K3"},{"c":"g5.2","t":"Sie programmieren ein Back-End mittels vorgegebener Programmiersprachen effizient, strukturiert und gemäss den relevanten Vorgaben. (K3)","k":"K4"},{"c":"g5.3","t":"Sie programmieren ein Front-End mittels vorgegebener Programmiersprachen effizient, strukturiert und gemäss den relevanten Vorgaben. (K3)","k":"K3"},{"c":"g5.4","t":"Sie überprüfen Zwischenergebnisse mit den Anforderungen (funktional, nicht-funktional, Sicherheit) und nehmen laufend Korrekturen vor. (K4)","k":"K3"},{"c":"g5.5","t":"Sie überprüfen die Einhaltung von Coderichtlinien. (K3)","k":"K4"},{"c":"g5.6","t":"Sie legen die Änderungen und Erweiterungen der Implementierung übersichtlich und zu-verlässig in einem Softwareverwaltungssystem ab. (K3)","k":"K3"},{"c":"g5.7","t":"Sie passen ein Realisierungskonzept nachvollziehbar an. (K3)","k":"K4"}]},"g6":{"n":"Qualität und Sicherheit von Applikationen und Schnittstellen überprüfen","lz":[{"c":"g6.1","t":"Sie beschreiben das Testumfeld einer Applikation mit allen relevanten Angaben. (K3)","k":"K3"},{"c":"g6.2","t":"Sie definieren Testmittel anhand der ausgewählten Testarten. (K4)","k":"K4"},{"c":"g6.3","t":"Sie beschreiben wiederholbare Testfälle in Bezug auf Anwendungsfälle und Anforderungen nachvollziehbar und definieren die erwarteten Resultate. (K4)","k":"K3"},{"c":"g6.4","t":"Sie bauen gemäss Testkonzept eine geeignete Testumgebung auf. (K3)","k":"K3"},{"c":"g6.5","t":"Sie implementieren die automatisierbaren Testfälle gemäss den definierten Testmitteln. (K4)","k":"K4"},{"c":"g6.6","t":"Sie führen Testfälle umfassend und sorgfältig durch. (K3)","k":"K3"},{"c":"g6.7","t":"Sie werten den Testlauf aus und protokollieren die Ergebnisse nachvollziehbar. (K4)","k":"K4"},{"c":"g6.8","t":"Sie definieren Korrekturmassnahmen und führen diese durch. (K4)","k":"K3"},{"c":"g6.9","t":"Sie überprüfen die Implementierung gemäss dem definierten Sicherheitskonzept und treffen geeignete Korrekturmassnahmen (K4).","k":"K4"}]},"h1":{"n":"Geeignete Plattform für die Auslieferung von Applikationen bestimmen","lz":[{"c":"h1.1","t":"Sie identifizieren die Abhängigkeiten zwischen verschiedenen Komponenten. (K4)","k":"K3"},{"c":"h1.2","t":"Sie definieren eine geeignete Plattform für den Betrieb einer Applikation. (K4)","k":"K4"},{"c":"h1.3","t":"Sie definieren ein Schichtenmodell innerhalb der Rahmenbedingungen des Stakeholders. (K4)","k":"K4"},{"c":"h1.4","t":"Sie identifizieren die Sicherheitsanforderungen an die Plattform und wählen geeignete Ser-vices aus. (K4)","k":"K3"},{"c":"h1.5","t":"Sie wählen die benötigten Ressourcen anhand der Empfehlung des Plattformbetreibers aus. (K3)","k":"K3"},{"c":"h1.6","t":"Sie prüfen im Team ihre Auswahl auf Konsistenz, nehmen Anpassungen vor und halten die Er-gebnisse fest. (K4)","k":"K3"}]},"h2":{"n":"Auslieferungsprozess von Applikationen definieren","lz":[{"c":"h2.1","t":"Sie analysieren die Abhängigkeit der Komponenten in Bezug auf den Auslieferungsprozess. (K4)","k":"K4"},{"c":"h2.3","t":"Sie bestimmen geeignete Deployment-Praktiken und halten diese fest. (K4)","k":"K3"},{"c":"h2.4","t":"Sie bestimmen eine geeignete Artefakt-Verwaltung und halten diese fest. (K4)","k":"K3"}]},"h3":{"n":"Auslieferungsprozess von Applikationen durchführen","lz":[{"c":"h3.1","t":"Sie richten Services für die Auslieferung ein. (K3)","k":"K3"},{"c":"h3.2","t":"Sie schreiben Automatisierungsskripte und definieren Umgebungsvariablen mit geeigneten Methoden und Tools. (K3)","k":"K4"},{"c":"h3.3","t":"Sie stellen Komponenten für die Auslieferung bereit. (K3)","k":"K4"},{"c":"h3.4","t":"Sie paketieren eine Applikation. (K3)","k":"K3"},{"c":"h3.5","t":"Sie verwalten und versionieren Artefakte. (K3)","k":"K3"},{"c":"h3.6","t":"Sie überprüfen den Auslieferungsprozess der Applikation gemäss Vorgaben. (K4)","k":"K3"},{"c":"h3.7","t":"Sie prüfen die Funktionsfähigkeit/das Zusammenspiel der Applikationen anhand eines Test-konzepts. (K4)","k":"K3"}]},"h4":{"n":"Applikationen und Schnittstellen überwachen und Probleme im laufenden Betrieb beheben","lz":[{"c":"h4.1","t":"Sie definieren und konfigurieren Tools für das Monitoring einer Applikation. (K3)","k":"K3"},{"c":"h4.2","t":"Sie führen das Monitoring in regelmässigen Abständen zuverlässig und sorgfältig durch. (K3)","k":"K4"},{"c":"h4.3","t":"Sie analysieren ein auftretendes Problem durch eine strukturierte Vorgehensweise. (K4)","k":"K4"},{"c":"h4.4","t":"Sie überprüfen Aktualität und Sicherheitseinstellungen der Applikationen und Schnittstellen anhand der Herstellerinformationen. (K4)","k":"K3"},{"c":"h4.5","t":"Sie legen ein zielführendes Vorgehen zur Problembehebung fest und besprechen dieses im Team und/oder mit dem Stakeholder. (K5)","k":"K3"},{"c":"h4.6","t":"Sie setzen die vereinbarten Massnahmen um und halten sie verständlich und nachvollziehbar fest. (K3)","k":"K3"}]}};
+
+</script>
+<script>
+/* ============================================================
+   Lernpfad — Prototyp. Zustand nur im Speicher, keine Persistenz.
+   ============================================================ */
+
+const TAB_DEFS = {
+  tree:{label:"Ausbildungsweg"},
+  feedback:{label:"Rückmeldungen"},
+  badges:{label:"Auszeichnungen"},
+  cockpit:{label:"Cockpit"}
+};
+const ROLE_TABS = {
+  lernende:["tree","feedback","badges"],
+  praxis:["tree","feedback","badges"],
+  hr:["tree","badges","cockpit"]
+};
+const ROLE_LABELS = {lernende:"Lernende", praxis:"Praxisbildner", hr:"Nachwuchsförderung"};
+
+let state = null;
+let justUnlocked = new Set();
+let modalOpenCode = null;
+let modalArt = "Anerkennung";
+
+/* ---------------- geometry helpers ---------------- */
+function hexPointsArr(cx,cy,r){
+  const pts=[];
+  for(let i=0;i<6;i++){
+    const a=(60*i-90)*Math.PI/180;
+    pts.push([cx+r*Math.cos(a), cy+r*Math.sin(a)]);
+  }
+  return pts;
+}
+function hexPoints(cx,cy,r){
+  return hexPointsArr(cx,cy,r).map(p=>p[0].toFixed(2)+","+p[1].toFixed(2)).join(" ");
+}
+function diamondPoints(cx,cy,r){
+  return `${cx},${(cy-r).toFixed(2)} ${(cx+r).toFixed(2)},${cy} ${cx},${(cy+r).toFixed(2)} ${(cx-r).toFixed(2)},${cy}`;
+}
+function escapeHTML(s){
+  return String(s==null?"":s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ---------------- state init ---------------- */
+function initState(){
+  state = {
+    view:"tree", role:"lernende", gameOn:true,
+    selected:"g3", panelOpen:true,
+    zoom:1, pan:{x:0,y:0},
+    status:{}, lz:{}, goalStatus:"locked",
+    feedback: FEEDBACK.map(f=>({...f})),
+    unreadIds:new Set(),
+    badgesEarned:{}
+  };
+  Object.keys(NODES).forEach(c=>{ state.status[c]="locked"; state.lz[c]=new Set(); });
+  DONE_START.forEach(c=>{
+    state.status[c]="done";
+    HK[c].lz.forEach(l=>state.lz[c].add(l.c));
+  });
+  state.status.g3="active";
+  state.lz.g3=new Set(HK.g3.lz.slice(0,2).map(l=>l.c));
+  state.status.c2="open";
+  state.lz.c2=new Set([HK.c2.lz[0].c]);
+
+  recomputeStatuses();
+
+  ["m1","m2","m3","m4"].forEach(id=> state.badgesEarned[id]=true);
+  BADGES.forEach(b=>{ if(!(b.id in state.badgesEarned)) state.badgesEarned[b.id]=false; });
+
+  state.feedback.forEach(f=>{ if(!f.read) state.unreadIds.add(f.id); });
+}
+
+function depsSatisfied(deps){
+  return deps.every(d=> d==="root" || state.status[d]==="done");
+}
+function recomputeStatuses(){
+  Object.keys(NODES).forEach(code=>{
+    const st = state.status[code];
+    if(st==="done"||st==="active"||st==="pending") return;
+    state.status[code] = depsSatisfied(NODES[code].dep) ? "open" : "locked";
+  });
+  state.goalStatus = depsSatisfied(GOAL.dep) ? "open" : "locked";
+}
+
+function computeXP(){
+  let lzCount=0, doneCount=0;
+  Object.keys(NODES).forEach(c=>{
+    lzCount += state.lz[c].size;
+    if(state.status[c]==="done") doneCount++;
+  });
+  return {xp: lzCount*10 + doneCount*100, doneCount, lzCount};
+}
+function allLzDone(code){ return HK[code].lz.every(l=> state.lz[code].has(l.c)); }
+
+/* ---------------- interaction: leistungsziele ---------------- */
+function canEditLZ(code){
+  if(state.role==="hr") return false;
+  if(state.status[code]==="done") return false;
+  return true;
+}
+function toggleLZ(code, lzCode){
+  if(!canEditLZ(code)) return;
+  const set = state.lz[code];
+  if(set.has(lzCode)){
+    set.delete(lzCode);
+    /* Status "active"/"pending" wird laut Freischaltregel (5.2) nie zurückgesetzt,
+       auch nicht wenn alle Haken wieder entfernt werden. */
+  } else {
+    set.add(lzCode);
+    if(state.status[code]==="open") state.status[code]="active";
+    if(state.gameOn) pushToast("xp","ERFAHRUNG","+10 XP","⭐");
+  }
+  recomputeStatuses();
+  renderAll();
+}
+
+function submitCompetency(code){
+  if(state.role!=="lernende") return;
+  if(!allLzDone(code)) return;
+  state.status[code]="pending";
+  recomputeStatuses();
+  pushToast("unlock","EINGEREICHT","Eingereicht — Wartet auf Bestätigung durch Praxisbildner:in","📨");
+  renderAll();
+}
+
+function computeBadgeEligibility(){
+  const {doneCount} = computeXP();
+  const doneSet = new Set(Object.keys(NODES).filter(c=>state.status[c]==="done"));
+  const all = codes => codes.every(c=>doneSet.has(c));
+  return {
+    m1: doneCount>=1, m2: doneCount>=5, m3:true, m4:true,
+    m5: all(["g1","g2","g3"]),
+    m6: doneCount>=10,
+    m7: all(["c1","c2","c3","c4"]),
+    m8: all(["a1","a2","a3","a4","a5","a6","a7"]),
+    m9: doneCount>=25,
+    m10: !!state.badgesEarned.m10
+  };
+}
+function checkBadges(){
+  const elig = computeBadgeEligibility();
+  BADGES.forEach(b=>{
+    if(b.id==="m10") return;
+    if(elig[b.id] && !state.badgesEarned[b.id]){
+      state.badgesEarned[b.id]=true;
+      if(state.gameOn) pushToast("badge","AUSZEICHNUNG", b.title, b.emoji);
+    }
+  });
+}
+
+function completeCompetency(code, art, good, better, next){
+  const lockedBefore = new Set(Object.keys(NODES).filter(c=>state.status[c]==="locked"));
+  const goalLockedBefore = state.goalStatus==="locked";
+
+  state.status[code]="done";
+  state.lz[code] = new Set(HK[code].lz.map(l=>l.c));
+  recomputeStatuses();
+
+  const fb = {id:"fb"+Date.now(), hk:code, date:"24.08.2026", art, read:false, good, better, next};
+  state.feedback.unshift(fb);
+  state.unreadIds.add(fb.id);
+
+  renderAll();
+  pushToast("xp","ABGESCHLOSSEN", `+100 XP · ${code} abgeschlossen`, "✅");
+
+  setTimeout(()=>{
+    const newlyUnlocked = Object.keys(NODES).filter(c=> lockedBefore.has(c) && state.status[c]==="open");
+    newlyUnlocked.forEach(c=>{
+      justUnlocked.add(c);
+      pushToast("unlock","FREIGESCHALTET", `Freigeschaltet — ${c} · ${shorten(HK[c].n,44)}`, "🔓");
+    });
+    if(goalLockedBefore && state.goalStatus==="open"){
+      pushToast("unlock","FREIGESCHALTET", "Freigeschaltet — IPA · Individuelle praktische Arbeit", "🔓");
+    }
+    renderTree();
+    setTimeout(()=>{ newlyUnlocked.forEach(c=>justUnlocked.delete(c)); renderTree(); }, 3300);
+  }, 500);
+
+  setTimeout(()=>{
+    checkBadges();
+    renderAll();
+  }, 950);
+}
+function shorten(s,n){ return s.length>n ? s.slice(0,n)+"…" : s; }
+
+/* ---------------- toasts ---------------- */
+let toastSeq=0;
+function pushToast(kind, eyebrow, title, emoji){
+  const stack = document.getElementById("toast-stack");
+  const el = document.createElement("div");
+  el.className = "toast "+kind;
+  const color = kind==="xp" ? "#f59e0b" : kind==="unlock" ? "#37BDD8" : "#E8A33D";
+  el.innerHTML = `<div class="toast-icon"><svg viewBox="0 0 36 36">
+      <polygon points="${hexPoints(18,18,17)}" fill="${color}" opacity="0.22"/>
+      <polygon points="${hexPoints(18,18,17)}" fill="none" stroke="${color}" stroke-width="1.5"/>
+    </svg><span>${emoji}</span></div>
+    <div class="toast-body"><div class="eyebrow">${eyebrow}</div><div class="toast-title">${escapeHTML(title)}</div></div>`;
+  stack.appendChild(el);
+  setTimeout(()=>{
+    el.classList.add("leaving");
+    setTimeout(()=>el.remove(), 320);
+  }, 3400);
+}
+
+/* ---------------- locked message ---------------- */
+function showLockedMessage(missing){
+  const host = document.getElementById("locked-toast-host");
+  const label = missing.length ? missing.join(", ") : "";
+  host.innerHTML = `<div class="locked-toast"><div class="title">Noch gesperrt</div><div class="text">Zuerst ${label} abschliessen</div></div>`;
+  clearTimeout(window.__lockedTimer);
+  window.__lockedTimer = setTimeout(()=>{ host.innerHTML=""; }, 2600);
+}
+
+/* ---------------- node click / selection ---------------- */
+function onNodeClick(code){
+  if(code==="GOAL"){
+    if(state.goalStatus!=="open"){
+      showLockedMessage(GOAL.dep.filter(d=>state.status[d]!=="done"));
+      return;
+    }
+    state.selected="GOAL"; state.panelOpen=true; renderAll();
+    return;
+  }
+  if(state.status[code]==="locked"){
+    showLockedMessage(NODES[code].dep.filter(d=> d!=="root" && state.status[d]!=="done"));
+    return;
+  }
+  state.selected=code; state.panelOpen=true; renderAll();
+}
+
+/* ---------------- SVG render ---------------- */
+function areaColor(code){ return AREAS[code[0]].color; }
+function areaDark(code){ return AREAS[code[0]].dark; }
+
+function renderTree(){
+  const g = document.getElementById("viewport");
+  let edges="", nodes="";
+
+  function edgeMarkup(x1,y1,x2,y2,live,liveColor){
+    const d = `M${x1},${y1} L${x2},${y2}`;
+    const casing = `<path class="edge-case" d="${d}" stroke-width="9"/>`;
+    let line;
+    if(live){
+      line = `<path class="edge-line live" d="${d}" stroke="${liveColor}" stroke-width="3.5"/>`;
+    } else {
+      line = `<path class="edge-line" d="${d}" stroke="#DBCDAC" stroke-width="2.5" stroke-dasharray="2 7"/>`;
+    }
+    return casing+line;
+  }
+
+  Object.keys(NODES).forEach(code=>{
+    const n = NODES[code];
+    n.dep.forEach(d=>{
+      const from = d==="root" ? ROOT : NODES[d];
+      const live = d==="root" || state.status[d]==="done";
+      edges += edgeMarkup(from.x, from.y, n.x, n.y, live, areaColor(code));
+    });
+  });
+  GOAL.dep.forEach(d=>{
+    const from = NODES[d];
+    const live = state.status[d]==="done";
+    edges += edgeMarkup(from.x, from.y, GOAL.x, GOAL.y, live, "#f59e0b");
+  });
+
+  nodes += renderRootNode();
+  Object.keys(NODES).forEach(code=> nodes += renderNode(code));
+  nodes += renderGoalNode();
+
+  g.innerHTML = edges + nodes;
+  attachNodeHandlers();
+  applyTransform();
+}
+
+function renderRootNode(){
+  const r=44, color="#E8A33D";
+  let inner = `<filter id="root-glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="9"/></filter>`;
+  inner += `<polygon points="${hexPoints(ROOT.x,ROOT.y,r+7)}" fill="${color}" opacity="0.28" filter="url(#root-glow)"/>`;
+  inner += `<polygon points="${hexPoints(ROOT.x,ROOT.y,r)}" fill="${color}" stroke="#FBDFA6" stroke-width="2"/>`;
+  inner += `<text x="${ROOT.x}" y="${ROOT.y+5}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="14" fill="#2f3e46">${ROOT.code}</text>`;
+  const lines = ROOT.label.split("\n");
+  const ly = ROOT.y + r + 22;
+  inner += `<text class="label-text" x="${ROOT.x}" y="${ly}" text-anchor="middle" font-size="11">`;
+  lines.forEach((line,i)=> inner += `<tspan x="${ROOT.x}" dy="${i===0?0:14}">${escapeHTML(line)}</tspan>`);
+  inner += `</text>`;
+  return `<g class="node root-node">${inner}</g>`;
+}
+
+function renderGoalNode(){
+  const unlocked = state.goalStatus==="open";
+  const color="#f59e0b";
+  let inner = `<polygon points="${diamondPoints(GOAL.x,GOAL.y,58)}" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.3"/>`;
+  inner += `<polygon points="${diamondPoints(GOAL.x,GOAL.y,46)}" fill="${unlocked?color:'#E9E1CE'}" fill-opacity="${unlocked?0.92:0.7}" stroke="${color}" stroke-width="2" ${unlocked?'':'stroke-dasharray="2 7"'}/>`;
+  if(unlocked){
+    inner += `<text x="${GOAL.x}" y="${GOAL.y+5}" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="13" fill="#2f3e46">${GOAL.code}</text>`;
+  } else {
+    inner += `<text x="${GOAL.x}" y="${GOAL.y+6}" text-anchor="middle" font-size="16">🔒</text>`;
+  }
+  const lines = GOAL.label.split("\n");
+  const ly = GOAL.y + 46 + 22;
+  inner += `<text class="label-text" x="${GOAL.x}" y="${ly}" text-anchor="middle" font-size="11">`;
+  lines.forEach((line,i)=> inner += `<tspan x="${GOAL.x}" dy="${i===0?0:14}">${escapeHTML(line)}</tspan>`);
+  inner += `</text>`;
+  const cls = ["node","goal-node", unlocked?"open":"locked"];
+  return `<g class="${cls.join(' ')}" data-code="GOAL" tabindex="${unlocked?0:-1}" role="button" aria-label="IPA">${inner}</g>`;
+}
+
+function renderNode(code){
+  const n = NODES[code];
+  const st = state.status[code];
+  const color = areaColor(code), dark = areaDark(code);
+  const lzTotal = HK[code].lz.length;
+  const lzDoneN = state.lz[code].size;
+  const frac = st==="done" ? 1 : (lzTotal ? lzDoneN/lzTotal : 0);
+  const r=31, ringR=39;
+  const circ = 2*Math.PI*ringR;
+  const dashoff = circ*(1-frac);
+  const glowOp = st==="done" ? 0.55 : st==="active" ? 0.3 : 0;
+  const isSel = state.selected===code && state.panelOpen;
+  const cls = ["node", st];
+  if(isSel) cls.push("sel");
+  if(justUnlocked.has(code)) cls.push("just-unlocked");
+  const focusable = st!=="locked";
+  const fid = "glow-"+code;
+
+  let fill, fillOp, stroke, strokeOp=1, dash="";
+  if(st==="done"){ fill=color; fillOp=1; stroke=color; }
+  else if(st==="active"){ fill=dark; fillOp=0.9; stroke=color; dash="6 4"; }
+  else if(st==="pending"){ fill=dark; fillOp=0.9; stroke="#E8A33D"; dash="6 4"; }
+  else if(st==="open"){ fill=dark; fillOp=0.35; stroke=color; strokeOp=0.6; }
+  else { fill="#2f3e46"; fillOp=0.82; stroke="#8B98A0"; }
+
+  let inner = `<filter id="${fid}" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="7"/></filter>`;
+  inner += `<polygon class="glow" points="${hexPoints(n.x,n.y,r+6)}" fill="${color}" opacity="${glowOp}" filter="url(#${fid})"/>`;
+  inner += `<circle cx="${n.x}" cy="${n.y}" r="${ringR}" fill="none" stroke="#E9E1CE" stroke-width="3"/>`;
+  inner += `<circle class="ring-fill" cx="${n.x}" cy="${n.y}" r="${ringR}" fill="none" stroke="${st==='pending'?'#E8A33D':color}" stroke-width="3" stroke-linecap="round" stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${dashoff.toFixed(2)}" transform="rotate(-90 ${n.x} ${n.y})"/>`;
+  inner += `<polygon class="hex-main" points="${hexPoints(n.x,n.y,r)}" fill="${fill}" fill-opacity="${fillOp}" stroke="${stroke}" stroke-opacity="${strokeOp}" stroke-width="2" ${dash?`stroke-dasharray="${dash}"`:""}/>`;
+  if(isSel){
+    inner += `<polygon points="${hexPoints(n.x,n.y,r+4)}" fill="none" stroke="#2f3e46" stroke-width="2"/>`;
+  }
+  if(st==="locked"){
+    inner += `<text class="lock-icon" x="${n.x}" y="${n.y+6}" text-anchor="middle">🔒</text>`;
+  } else {
+    inner += `<text class="code-text" x="${n.x}" y="${n.y+4}" text-anchor="middle" font-size="12">${code}</text>`;
+    if(st==="done"){
+      inner += `<text x="${n.x}" y="${n.y+18}" text-anchor="middle" font-size="12" fill="#0A0E1C" font-weight="700">✓</text>`;
+    }
+  }
+  const lines = n.label.split("\n");
+  const ly = n.y + 50;
+  inner += `<text class="label-text" x="${n.x}" y="${ly}" text-anchor="middle" font-size="11">`;
+  lines.forEach((line,i)=> inner += `<tspan x="${n.x}" dy="${i===0?0:14}">${escapeHTML(line)}</tspan>`);
+  inner += `</text>`;
+
+  return `<g class="${cls.join(' ')}" data-code="${code}" tabindex="${focusable?0:-1}" role="button" aria-label="${code} — ${statusLabel(st)}">${inner}</g>`;
+}
+
+function attachNodeHandlers(){
+  document.querySelectorAll("#viewport .node[data-code]").forEach(el=>{
+    el.addEventListener("click", ()=> onNodeClick(el.dataset.code));
+    el.addEventListener("keydown", e=>{
+      if(e.key==="Enter"||e.key===" "){ e.preventDefault(); onNodeClick(el.dataset.code); }
+    });
+  });
+}
+
+function applyTransform(){
+  const g = document.getElementById("viewport");
+  if(g) g.setAttribute("transform", `translate(${state.pan.x} ${state.pan.y}) scale(${state.zoom})`);
+}
+function zoomBy(factor){
+  state.zoom = Math.min(2.2, Math.max(0.55, state.zoom*factor));
+  applyTransform();
+}
+function resetView(){ state.zoom=1; state.pan={x:0,y:0}; applyTransform(); }
+
+function setupPan(){
+  const canvas = document.getElementById("tree-canvas");
+  let dragging=false, startX=0, startY=0, startPan={x:0,y:0};
+  canvas.addEventListener("pointerdown", e=>{
+    if(e.target.closest(".node")) return;
+    dragging=true; startX=e.clientX; startY=e.clientY; startPan={...state.pan};
+    canvas.classList.add("dragging");
+    canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener("pointermove", e=>{
+    if(!dragging) return;
+    const factor = 1320/Math.max(canvas.clientWidth,1);
+    state.pan = {x: startPan.x + (e.clientX-startX)*factor, y: startPan.y + (e.clientY-startY)*factor};
+    applyTransform();
+  });
+  ["pointerup","pointercancel","pointerleave"].forEach(ev=>{
+    canvas.addEventListener(ev, ()=>{ dragging=false; canvas.classList.remove("dragging"); });
+  });
+}
+
+/* ---------------- panel ---------------- */
+function statusLabel(st){
+  return {done:"Abgeschlossen", active:"In Arbeit", pending:"Wartet auf Bestätigung", open:"Freigeschaltet", locked:"Gesperrt"}[st] || st;
+}
+
+function renderPanel(){
+  const panel = document.getElementById("detail-panel");
+  panel.classList.toggle("open", state.panelOpen);
+  if(!state.selected){
+    panel.innerHTML = emptyPanelHTML();
+    return;
+  }
+  if(state.selected==="GOAL"){
+    panel.innerHTML = goalPanelHTML();
+    const cb = document.getElementById("panel-close-btn");
+    if(cb) cb.addEventListener("click", ()=>{ state.panelOpen=false; renderPanel(); });
+    return;
+  }
+  const code = state.selected;
+  panel.innerHTML = competencyPanelHTML(code);
+  attachPanelHandlers(code);
+}
+
+function emptyPanelHTML(){
+  return `<div class="detail-empty">
+    <svg class="empty-hex" viewBox="0 0 60 60"><polygon points="${hexPoints(30,30,26)}" fill="none" stroke="#C9BFA6" stroke-width="2"/></svg>
+    <p>Wähle eine Handlungskompetenz im Baum, um Leistungsziele und Rückmeldungen zu sehen.</p>
+  </div>`;
+}
+function goalPanelHTML(){
+  return `<button class="panel-close" aria-label="Schliessen" id="panel-close-btn">×</button>
+  <div class="panel-scroll"><div class="panel-head">
+    <div class="panel-area-row" style="color:#f59e0b">
+      <svg class="panel-area-hex" viewBox="0 0 20 20"><polygon points="${diamondPoints(10,10,9)}" fill="#f59e0b"/></svg>
+      <span class="panel-area-name">Individuelle praktische Arbeit</span>
+    </div>
+    <h2 class="panel-title"><span class="code" style="color:#f59e0b">IPA</span> · Individuelle praktische Arbeit</h2>
+    <div class="panel-chips"><span class="chip status-done">Freigeschaltet</span></div>
+  </div>
+  <div class="panel-body"><p style="color:var(--txt-2); font-size:13px; line-height:1.6;">Alle fünf Handlungskompetenzbereiche sind abgeschlossen. Die individuelle praktische Arbeit kann geplant werden.</p></div>
+  </div>`;
+}
+
+function competencyPanelHTML(code){
+  const hk = HK[code];
+  const st = state.status[code];
+  const area = AREAS[code[0]];
+  const lzDoneN = state.lz[code].size;
+  const lzTotal = hk.lz.length;
+  const related = state.feedback.filter(f=>f.hk===code);
+
+  const lzRows = hk.lz.map(l=>{
+    const checked = state.lz[code].has(l.c);
+    const disabled = st==="done" || state.role==="hr";
+    return `<button class="lz-item" data-lz="${l.c}" ${disabled?"disabled":""} style="--nc:${area.color}">
+      <span class="lz-box ${checked?"checked":""}" style="${checked?`background:${area.color};`:""}">
+        <svg viewBox="0 0 12 12"><path d="M2 6.2L4.7 9 10 3" stroke="#0A0E1C" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="lz-main">
+        <span class="lz-code ${checked?"checked":""}">${l.c}</span>
+        <span class="lz-text">${escapeHTML(l.t)}</span>
+      </span>
+      <span class="lz-tax">${l.k||"—"}</span>
+    </button>`;
+  }).join("");
+
+  const fbHTML = related.length ? `
+    <div class="section-head"><span class="eyebrow">RÜCKMELDUNGEN</span><span class="section-count">${related.length}</span></div>
+    <div class="fb-mini">${related.map(f=>`
+      <div class="fb-mini-card">
+        <div class="fb-mini-top">
+          <span class="fb-date">${f.date}</span>
+          <span class="fb-person">Praxisbildner:in</span>
+          <span class="fb-art-chip ${f.art==='Anerkennung'?'anerkennung':'entwicklungsimpuls'}">${f.art}</span>
+        </div>
+        <p class="fb-mini-text">${escapeHTML(shorten(f.good,150))}</p>
+      </div>`).join("")}</div>` : "";
+
+  return `<button class="panel-close" aria-label="Schliessen" id="panel-close-btn">×</button>
+    <div class="panel-scroll">
+      <div class="panel-head">
+        <div class="panel-area-row" style="color:${area.color}">
+          <svg class="panel-area-hex" viewBox="0 0 20 20"><polygon points="${hexPoints(10,10,9)}" fill="${area.color}"/></svg>
+          <span class="panel-area-name">${escapeHTML(area.name)}</span>
+        </div>
+        <h2 class="panel-title"><span class="code" style="color:${area.color}">${code}</span> · ${escapeHTML(hk.n)}</h2>
+        <div class="panel-chips">
+          <span class="chip status-${st}">${statusLabel(st)}</span>
+          <span class="chip">${lzDoneN} von ${lzTotal} Leistungszielen</span>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="section-head"><span class="eyebrow">LEISTUNGSZIELE</span><span class="section-count">${lzDoneN}/${lzTotal}</span></div>
+        <div class="lz-list">${lzRows}</div>
+        ${fbHTML}
+      </div>
+    </div>
+    <div class="panel-foot">${footerHTML(code, st, lzDoneN, lzTotal)}</div>`;
+}
+
+function footerHTML(code, st, done, total){
+  const missing = total-done;
+  if(st==="done"){
+    return `<button class="btn-primary" disabled>Abgeschlossen und bestätigt</button>
+      <p class="foot-hint">Bestätigt mit Rückmeldung. Änderungen sind über die Berufsbildung möglich.</p>`;
+  }
+  if(state.role==="hr"){
+    return `<p class="readonly-hint">Nur Lesezugriff. Kompetenzen werden von Lernenden und Praxisbildenden gepflegt.</p>`;
+  }
+  if(state.role==="lernende"){
+    if(st==="pending"){
+      return `<button class="btn-primary" disabled>Eingereicht · wartet auf Praxisbildner:in</button>
+        <p class="foot-hint">Deine Praxisbildnerin oder dein Praxisbildner bestätigt die Kompetenz mit einer Rückmeldung.</p>`;
+    }
+    if(missing===0){
+      return `<button class="btn-primary" id="submit-btn">Zur Bestätigung einreichen</button>
+        <p class="foot-hint">Alle Leistungsziele erfüllt. Bereit zur Bestätigung.</p>`;
+    }
+    return `<button class="btn-primary" disabled>Zur Bestätigung einreichen</button>
+      <p class="foot-hint">Noch <b>${missing}</b> Leistungsziele offen.</p>`;
+  }
+  if(state.role==="praxis"){
+    if(missing===0 || st==="pending"){
+      return `<button class="btn-primary" id="confirm-btn">Bestätigen und Rückmeldung geben</button>
+        <p class="foot-hint">Die Kompetenz wird erst abgeschlossen, <b>wenn eine Rückmeldung erfasst ist</b>.</p>`;
+    }
+    return `<button class="btn-primary" disabled>Bestätigen und Rückmeldung geben</button>
+      <p class="foot-hint">Noch <b>${missing}</b> Leistungsziele offen.</p>`;
+  }
+  return "";
+}
+
+function attachPanelHandlers(code){
+  const closeBtn = document.getElementById("panel-close-btn");
+  if(closeBtn) closeBtn.addEventListener("click", ()=>{ state.panelOpen=false; renderPanel(); });
+  document.querySelectorAll(".lz-item").forEach(btn=>{
+    btn.addEventListener("click", ()=> toggleLZ(code, btn.dataset.lz));
+  });
+  const submitBtn = document.getElementById("submit-btn");
+  if(submitBtn) submitBtn.addEventListener("click", ()=> submitCompetency(code));
+  const confirmBtn = document.getElementById("confirm-btn");
+  if(confirmBtn) confirmBtn.addEventListener("click", ()=> openModal(code));
+}
+
+/* ---------------- modal ---------------- */
+function openModal(code){
+  modalOpenCode = code; modalArt="Anerkennung";
+  const overlay = document.getElementById("modal-overlay");
+  overlay.innerHTML = modalHTML(code);
+  overlay.classList.add("open");
+  attachModalHandlers(code);
+  setTimeout(()=>{ const f=document.getElementById("fb-good"); if(f) f.focus(); }, 60);
+}
+function closeModal(){
+  modalOpenCode = null;
+  const overlay = document.getElementById("modal-overlay");
+  overlay.classList.remove("open");
+  setTimeout(()=>{ overlay.innerHTML=""; }, 220);
+}
+function modalHTML(code){
+  const hk = HK[code];
+  return `<div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-head">
+      <div class="eyebrow">SCHRITT 2 VON 2</div>
+      <h2 class="modal-title" id="modal-title">Rückmeldung zu ${code}</h2>
+      <p class="modal-sub">${escapeHTML(hk.n)}</p>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Art der Rückmeldung</label>
+        <div class="art-toggle">
+          <button type="button" class="art-btn sel" data-art="Anerkennung">Anerkennung</button>
+          <button type="button" class="art-btn" data-art="Entwicklungsimpuls">Entwicklungsimpuls</button>
+        </div>
+      </div>
+      <div class="field" id="field-good">
+        <label>Was gut gelaufen ist <span class="req">*</span></label>
+        <textarea id="fb-good" placeholder="Konkret und beobachtbar formulieren."></textarea>
+        <div class="field-error">Ohne diese Angabe wird die Kompetenz nicht abgeschlossen.</div>
+      </div>
+      <div class="field">
+        <label>Was noch besser werden könnte</label>
+        <textarea id="fb-better" placeholder="Optional."></textarea>
+      </div>
+      <div class="field">
+        <label>Nächster Schritt</label>
+        <textarea id="fb-next" placeholder="Optional."></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" id="modal-cancel">Abbrechen</button>
+      <button class="btn-primary" id="modal-save">Rückmeldung speichern und abschliessen</button>
+    </div>
+  </div>`;
+}
+function attachModalHandlers(code){
+  document.getElementById("modal-cancel").addEventListener("click", closeModal);
+  document.getElementById("modal-overlay").addEventListener("click", e=>{
+    if(e.target.id==="modal-overlay") closeModal();
+  });
+  document.querySelectorAll(".art-btn").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      modalArt = b.dataset.art;
+      document.querySelectorAll(".art-btn").forEach(x=>x.classList.remove("sel"));
+      b.classList.add("sel");
+    });
+  });
+  document.getElementById("modal-save").addEventListener("click", ()=>{
+    const good = document.getElementById("fb-good").value.trim();
+    const better = document.getElementById("fb-better").value.trim();
+    const next = document.getElementById("fb-next").value.trim();
+    if(!good){
+      document.getElementById("field-good").classList.add("error");
+      document.getElementById("fb-good").focus();
+      return;
+    }
+    closeModal();
+    completeCompetency(code, modalArt, good, better, next);
+  });
+}
+
+/* ---------------- header / tabs ---------------- */
+function allowedTabsForRole(role){
+  let tabs = ROLE_TABS[role].slice();
+  if(!state.gameOn) tabs = tabs.filter(t=>t!=="badges");
+  return tabs;
+}
+function allowedTabs(){ return allowedTabsForRole(state.role); }
+
+function renderHeader(){
+  const {xp} = computeXP();
+  const level = Math.floor(xp/1500)+1;
+  const pct = Math.min(100, (xp%1500)/1500*100);
+  document.getElementById("xp-level").textContent = `Stufe ${level} · 2. Lehrjahr`;
+  document.getElementById("xp-num").textContent = `${xp} XP`;
+  document.getElementById("xp-bar-fill").style.width = pct+"%";
+
+  const sw = document.getElementById("game-switch");
+  sw.classList.toggle("on", state.gameOn);
+  sw.setAttribute("aria-checked", state.gameOn);
+
+  document.querySelectorAll(".role-btn").forEach(b=> b.classList.toggle("active", b.dataset.role===state.role));
+}
+
+function countFeedbackForRole(){ return state.feedback.length; }
+
+function renderTabs(){
+  const allowed = allowedTabs();
+  if(!allowed.includes(state.view)){
+    state.view = state.role==="hr" ? "cockpit" : "tree";
+  }
+  const nav = document.getElementById("tabs");
+  nav.innerHTML = allowed.map(key=>{
+    let count = "";
+    if(key==="feedback"){
+      const hot = state.unreadIds.size>0;
+      count = `<span class="tab-count ${hot?'hot':''}">${countFeedbackForRole()}</span>`;
+    }
+    if(key==="badges"){
+      const earned = Object.values(state.badgesEarned).filter(Boolean).length;
+      count = `<span class="tab-count">${earned}</span>`;
+    }
+    return `<button class="tab-btn ${state.view===key?'active':''}" data-view="${key}">${TAB_DEFS[key].label}${count}</button>`;
+  }).join("");
+  nav.querySelectorAll(".tab-btn").forEach(b=> b.addEventListener("click", ()=>{ state.view=b.dataset.view; renderAll(); }));
+}
+
+function renderOverlayCards(){
+  const {doneCount} = computeXP();
+  const pct = (doneCount/25*100).toFixed(0);
+  document.getElementById("progress-num").textContent = doneCount;
+  document.getElementById("progress-fill").style.width = pct+"%";
+}
+
+/* ---------------- views ---------------- */
+function renderView(){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  const el = document.getElementById("view-"+state.view);
+  if(el) el.classList.add("active");
+  if(state.view==="feedback") renderFeedbackView();
+  if(state.view==="badges") renderBadgesView();
+  if(state.view==="cockpit") renderCockpitView();
+}
+
+function renderFeedbackView(){
+  const el = document.getElementById("view-feedback");
+  const isLernende = state.role==="lernende";
+  const heading = isLernende ? "Meine Rückmeldungen" : "Rückmeldungen an Anna Meier";
+  const lead = isLernende
+    ? "Jede abgeschlossene Handlungskompetenz braucht eine Rückmeldung. Sie hängt an der Kompetenz und bleibt nachvollziehbar."
+    : "Jede bestätigte Handlungskompetenz erzeugt eine Rückmeldung. So bleibt nachvollziehbar, was besprochen wurde.";
+  const banner = !state.gameOn ? `<div class="plain-banner"><b>Spielelemente sind ausgeschaltet.</b>&nbsp;Fortschritt und Rückmeldungen funktionieren unverändert weiter.</div>` : "";
+
+  const cards = state.feedback.map(f=>{
+    const hk = HK[f.hk];
+    const unread = state.unreadIds.has(f.id);
+    const shortTitle = shorten(hk.n, 34);
+    let dl = `<dt>Was gut gelaufen ist</dt><dd>${escapeHTML(f.good)}</dd>`;
+    if(f.better) dl += `<dt>Was noch besser werden könnte</dt><dd>${escapeHTML(f.better)}</dd>`;
+    if(f.next) dl += `<dt>Nächster Schritt</dt><dd>${escapeHTML(f.next)}</dd>`;
+    const markBtn = isLernende
+      ? (unread ? `<button class="btn-secondary mark-read" data-id="${f.id}">Als gelesen markieren</button>` : `<button class="btn-secondary read" disabled>✓ Gelesen</button>`)
+      : "";
+    return `<div class="fb-card ${unread?'unread':''}">
+      <div class="fb-top">
+        ${unread?'<span class="fb-new">NEU</span>':''}
+        <span class="fb-date mono">${f.date}</span>
+        <span class="fb-person">Praxisbildner:in</span>
+        <span class="fb-art-chip ${f.art==='Anerkennung'?'anerkennung':'entwicklungsimpuls'}">${f.art}</span>
+        <span class="fb-comp-chip" style="color:${AREAS[f.hk[0]].color}">${f.hk} · ${escapeHTML(shortTitle)}</span>
+      </div>
+      <dl class="fb-dl">${dl}</dl>
+      ${markBtn}
+    </div>`;
+  }).join("");
+
+  el.innerHTML = `<div class="view-inner">
+    <div class="view-header"><h1>${heading}</h1><p class="lead">${lead}</p></div>
+    ${banner}
+    <div class="fb-cards">${cards || '<p style="color:var(--muted)">Noch keine Rückmeldungen.</p>'}</div>
+  </div>`;
+  el.querySelectorAll(".mark-read").forEach(btn=>{
+    btn.addEventListener("click", ()=>{ state.unreadIds.delete(btn.dataset.id); renderAll(); });
+  });
+}
+
+function renderBadgesView(){
+  const el = document.getElementById("view-badges");
+  const cards = BADGES.map(b=>{
+    const earned = state.badgesEarned[b.id];
+    const cls = ["badge-card"]; if(earned) cls.push("earned"); if(b.grade) cls.push("grade");
+    return `<div class="${cls.join(' ')}" style="--bc:${b.color}">
+      <span class="rarity-chip">${b.tier}</span>
+      <div class="medal">
+        <svg viewBox="0 0 64 64" width="64" height="64">
+          <defs><linearGradient id="grad-${b.id}" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="${b.color}"/><stop offset="1" stop-color="#0A0E1C"/>
+          </linearGradient></defs>
+          <polygon points="${hexPoints(32,32,28)}" fill="${earned?`url(#grad-${b.id})`:'#EFE9DA'}" stroke="${earned?b.color:'#DBCDAC'}" stroke-width="2" ${b.grade?'stroke-dasharray="4 4"':''}/>
+        </svg>
+        <span class="medal-emoji">${b.emoji}</span>
+      </div>
+      <h3 class="badge-title">${escapeHTML(b.title)}</h3>
+      <p class="badge-desc">${escapeHTML(b.desc)}</p>
+      <div class="badge-status">${earned?"erhalten":"gesperrt"}</div>
+    </div>`;
+  }).join("");
+  el.innerHTML = `<div class="view-inner">
+    <div class="view-header"><h1>Auszeichnungen</h1><p class="lead">Für abgeschlossene Handlungskompetenzen und besondere Momente im Ausbildungsweg.</p></div>
+    <div class="badge-grid">${cards}</div>
+  </div>`;
+}
+
+function renderCockpitView(){
+  const el = document.getElementById("view-cockpit");
+  const banner = !state.gameOn ? `<div class="plain-banner"><b>Spielelemente sind ausgeschaltet.</b>&nbsp;Fortschritt und Rückmeldungen funktionieren unverändert weiter.</div>` : "";
+  const avg = Math.round(ROSTER.reduce((s,r)=>s+r.progress,0)/ROSTER.length);
+  const flagged = ROSTER.filter(r=>r.flag).length;
+  const rows = ROSTER.map(r=>{
+    const initials = r.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    return `<tr class="${r.flag?'flag':''}">
+      <td><div class="roster-person">
+        <div class="initials" style="background:${r.color}">${initials}</div>
+        <div class="person-meta"><div class="person-name">${r.flag?'<span class="flag-dot"></span>':''}${escapeHTML(r.name)}</div><div class="person-role">${escapeHTML(r.role)}</div></div>
+      </div></td>
+      <td>${r.year}</td>
+      <td><div class="roster-progress"><div class="rp-track"><div class="rp-fill" style="width:${r.progress}%;background:${r.color}"></div></div><span class="rp-pct mono">${r.progress}%</span></div></td>
+      <td class="last-fb">${r.last}</td>
+    </tr>`;
+  }).join("");
+  const rules = RULES.map((r,i)=>`<div class="rule-row">
+    <div class="rule-text"><div class="rule-title">${escapeHTML(r.title)}</div><div class="rule-desc">${escapeHTML(r.desc)}</div></div>
+    <button class="switch ${r.on?'on':''}" data-rule="${i}" role="switch" aria-checked="${r.on}"></button>
+  </div>`).join("");
+
+  el.innerHTML = `<div class="view-inner">
+    <div class="view-header"><h1>Cockpit</h1><p class="lead">Übersicht der Nachwuchskräfte in der Fachrichtung Applikationsentwicklung.</p></div>
+    ${banner}
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-num">24</div><div class="kpi-label">Nachwuchskräfte</div><div class="kpi-sub">über alle Berufsfelder</div></div>
+      <div class="kpi-card"><div class="kpi-num">${avg} %</div><div class="kpi-label">Ø Ausbildungsstand</div><div class="kpi-sub">Handlungskompetenzen abgeschlossen</div></div>
+      <div class="kpi-card"><div class="kpi-num">3</div><div class="kpi-label">Offene Bestätigungen</div><div class="kpi-sub">warten auf Praxisbildende</div></div>
+      <div class="kpi-card alert"><div class="kpi-num">${flagged}</div><div class="kpi-label">Hinweise</div><div class="kpi-sub">Regel ausgelöst</div></div>
+    </div>
+    <div class="cockpit-grid">
+      <div class="cockpit-table-card">
+        <h2>Nachwuchskräfte · Applikationsentwicklung</h2>
+        <table class="roster"><thead><tr><th>Person</th><th>Lehrjahr</th><th>Fortschritt</th><th>Letzte Rückmeldung</th></tr></thead>
+        <tbody>${rows}</tbody></table>
+      </div>
+      <div class="rules-card"><h2>Regeln</h2>${rules}</div>
+    </div>
+  </div>`;
+  el.querySelectorAll(".switch[data-rule]").forEach(sw=>{
+    sw.addEventListener("click", ()=>{
+      const i = Number(sw.dataset.rule);
+      RULES[i].on = !RULES[i].on;
+      renderCockpitView();
+    });
+  });
+}
+
+/* ---------------- master render ---------------- */
+function renderAll(){
+  document.getElementById("app").classList.toggle("plain", !state.gameOn);
+  renderHeader();
+  renderTabs();
+  renderTree();
+  renderOverlayCards();
+  renderPanel();
+  renderView();
+}
+
+/* ---------------- setup ---------------- */
+function setupHeaderHandlers(){
+  document.querySelectorAll(".role-btn").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      state.role = b.dataset.role;
+      const allowed = allowedTabsForRole(state.role);
+      if(!allowed.includes(state.view)) state.view = state.role==="hr" ? "cockpit" : "tree";
+      renderAll();
+    });
+  });
+  document.getElementById("game-switch").addEventListener("click", ()=>{
+    state.gameOn = !state.gameOn;
+    if(!state.gameOn && state.view==="badges") state.view="tree";
+    renderAll();
+  });
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  initState();
+  setupHeaderHandlers();
+  setupPan();
+  document.getElementById("zoom-in").addEventListener("click", ()=>zoomBy(1.2));
+  document.getElementById("zoom-out").addEventListener("click", ()=>zoomBy(1/1.2));
+  document.getElementById("zoom-reset").addEventListener("click", resetView);
+  document.addEventListener("keydown", e=>{
+    if(e.key==="Escape"){
+      if(modalOpenCode){ closeModal(); }
+      else if(state.panelOpen){ state.panelOpen=false; renderPanel(); }
+    }
+  });
+  renderAll();
+});
+
+</script>
+</body>
+</html>
